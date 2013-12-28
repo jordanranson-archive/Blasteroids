@@ -45,12 +45,12 @@ Game = function() {
         var self = this;
 
         var player = {
-            name: prompt("What's your name?", 'Anonymous'+(new Date()).getTime()),
+            name: prompt("What's your name?", 'Anonymous'+((new Date()).getTime()>>4).toString(16)),
             type: 'player',
             pos: {x: 0, y: 0},
             last: {x: 0, y: 0},
             vel: {x: 0, y: 0},
-            speed: 0.5,
+            speed: 0.25,
             angle: 0,
             radius: 48,
             alive: true,
@@ -70,8 +70,21 @@ Game = function() {
             self.entities = entities;
         });
 
+        socket.on('updateentity', function (entity) {
+            self.entities.update(entity.name, entity);
+        });
+
         socket.on('updatechat', function (playername, data) {
-            $('#conversation').append('<b>'+ playername + ':</b> ' + data + '<br>');
+            var $msg = $('<span class="f"><b>&lt;'+ playername + '&gt;</b> ' + data + '</span><br>');
+            var $conversation = $('#conversation');
+                $conversation.append($msg);
+                $conversation.animate({scrollTop: $conversation.height()}, 100);
+            setTimeout(function(){
+                $msg.removeClass('f');
+            },1);
+            setTimeout(function(){
+                $msg.addClass('t');
+            },5000);
         });
     };
 
@@ -88,6 +101,7 @@ Game = function() {
             if(e.which == 13) {
                 $(this).blur();
                 $('#datasend').focus().click();
+                $(this).focus();
             }
         });
     };

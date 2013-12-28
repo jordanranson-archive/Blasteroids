@@ -13,11 +13,13 @@ Array.prototype.find = function(name) {
 };
 
 Array.prototype.indexOfName = function(name) {
-    return this.indexOf(this.find(name));
+    var object = this.find(name);
+    return object === -1 ? -1 : this.indexOf(object);
 };
 
 Array.prototype.remove = function(name) {
-    this.splice(this.indexOfName(name), 1);
+    var index = this.indexOfName(name);
+    if( index !== -1 ) this.splice(index, 1);
 };
 
 Array.prototype.update = function(name, data) {

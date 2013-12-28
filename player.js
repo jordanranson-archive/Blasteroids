@@ -40,7 +40,7 @@ Player.update = function(entity) {
     entity.vel.y *= .99;
 
     // send to server
-    if( entity.pos.x !== entity.last.x || entity.pos.y !== entity.last.y ) {
+    if( entity.pos.x<<0 !== entity.last.x<<0 || entity.pos.y<<0 !== entity.last.y<<0 ) {
         socket.emit('updateentity', entity);
     }
 
@@ -67,7 +67,7 @@ Player.render = function(entity) {
     ];
 
     var options = {
-        color: game.playername===entity.name?'#0f0':'#777',
+        color: game.playername===entity.name?'#8cc152':'#777',
         width: 2
     };
 

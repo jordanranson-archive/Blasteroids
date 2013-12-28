@@ -24,13 +24,13 @@ io.sockets.on('connection', function(socket) {
 
         // Announce to players
         socket.emit('updatechat', 'SERVER', 'Welcome to deep space, ' + socket.playername);
-        socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + 'warped in.');
+        socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + ' warped in.');
     });
 
     // Update an entity
     socket.on('updateentity', function(entity) {
         entities.update(entity.name, entity);
-        io.sockets.in(socket.room).emit('updateentities', entities);
+        socket.broadcast.to(socket.room).emit('updateentity', entity);
     });
 
     // Send chat message
