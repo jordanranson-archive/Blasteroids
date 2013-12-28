@@ -7,6 +7,7 @@
     <script src="util.js"></script>
     <script src="key.js"></script>
     <script src="input.js"></script>
+    <script src="shipbuilder.js"></script>
     <script src="player.js"></script>
     <script src="game.js"></script>
     <script src="client.js"></script>
@@ -65,6 +66,14 @@
             width: 78%;
             border-radius: 100em;
         }
+        input[type=text].color {
+            font-size: 8pt;
+            padding: 0 2px;
+            width: 70px;
+            float: right;
+            margin: 0;
+            text-align: center;
+        }
         input[type=button] {
             background: #0f0f0f;
             width: 20%;
@@ -81,7 +90,14 @@
             position: absolute;
             z-index: 300;
         }
+        .menu {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            padding: 10px;
+            z-index: 399;
+        }
         .wrapper {
+            display: none;
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
             z-index: 400;
@@ -90,12 +106,12 @@
         .panel {
             box-sizing: border-box;
             width: 860px;
-            height: 800px;
+            height: 780px;
             background: #141414;
             padding: 20px;
             position: absolute;
             top: 50%; left: 50%;
-            margin: -400px 0 0 -430px;
+            margin: -390px 0 0 -430px;
             border-radius: 3px;
         }
         h1 {
@@ -124,6 +140,10 @@
             border-radius: 100em;
             cursor: pointer;
         }
+        .components li.active, .panel-close div.active {
+            background: #242424;
+            color: #ccc;
+        }
         .components li:last-of-type {
             margin: 0;
         }
@@ -131,20 +151,24 @@
             box-sizing: border-box;
             position: relative;
             width: 100%;
-            height: 635px;
+            height: 625px;
             border: solid 2px #242424;
         }
         .active-side {
             position: absolute;
             top: 0; left: 0; bottom: 0;
-            width: 66%;
+            width: 560px;
             z-index: 401;
+        }
+        .active-side canvas, canvas.grid {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
         }
         .mirrored-side {
             position: absolute;
-            top: 0; bottom: 0; right: 33%;
-            width: 33%;
-            border-left: solid 4px #000;
+            top: 0; bottom: 0; left: 280px;
+            width: 280px;
+            box-shadow: 1px 0 0 #242424 inset;
             background: rgba(0,0,0,.15);
             z-index: 402;
         }
@@ -161,7 +185,7 @@
         .tech {
             position: absolute;
             top: 0; bottom: 0; right: 0;
-            width: 33%;
+            width: 257px;
             z-index: 405;
             background: #000;
             box-sizing: border-box;
@@ -175,11 +199,14 @@
         }
         .tech li {
             margin: 0 0 10px 0;
-            padding: 5px;
             overflow: hidden;
+        }
+        .tech li:last-of-type {
+            margin: 0;
         }
         .tech li.radio {
             border: solid 2px #242424;
+            padding: 5px;
         }
         .tech h2 {
             color: #ccc;
@@ -191,6 +218,7 @@
         .tech p {
             line-height: 1.3em;
             overflow: hidden;
+            font-size: 9pt;
         }
         .tech span {
             color: #8cc152;
@@ -208,6 +236,8 @@
             float: left;
         }
         .tech hr {
+            clear: both;
+            overflow: hidden;
             border: none;
             height: 1px;
             background: #343434;
@@ -218,48 +248,68 @@
         span.pull-right {
             float: right;
         }
+        strong {
+            color: #999;
+        }
+        .pnl-reactor {
+            display: none;
+        }
     </style>    
 </head>
 <body>
-    <div class="wrapper wrp-shipbuilder">
+    <div class="menu">
+        <ul class="components">
+            <li id="build">Build Ship</li>
+        </ul>
+    </div>
+    <div class="wrapper wrp-shipbuilder" id="wrapper">
         <div class="panel">
             <h1>Build Your Ship</h1>
-            <ul class="components">
-                <li id="tabFuselage">Fuselage</li>
-                <li id="tabEngine">Engine</li>
-                <li id="tabWeapons">Weapons</li>
-                <li id="tabReactor">Reactor</li>
+            <ul class="components" id="shipTabs">
+                <li id="tabFuselage" data-for="fuselage" class="active">Fuselage</li>
+                <li id="tabEngine" data-for="engine">Engine</li>
+                <li id="tabWeapons" data-for="weapons">Weapons</li>
+                <li id="tabReactor" data-for="reactor">Reactor</li>
             </ul>
-            <div class="tab-pnl-wrapper">
+            <div class="tab-pnl-wrapper" id="tabPanel">
+
+                <canvas class="grid" id="grid"></canvas>
 
                 <div class="active-side">
-                    <div class="fuselage" id="fuselage">
-                    </div>
-                    <div class="weapons" id="weapons">
-                    </div>
-                    <div class="engine" id="engine">
-                    </div>
-                    <div class="reactor" id="reactor">
-                    </div>
+                    <canvas class="fuselage" id="fuselage"></canvas>
+                    <canvas class="weapons" id="weapons"></canvas>
+                    <canvas class="engine" id="engine"></canvas>
+                    <canvas class="reactor" id="reactor"></canvas>
                 </div>
+
                 <div class="mirrored-side"></div>
+
                 <div class="tech">
                     <ul>
                         <li>
-                            <h2>Stats</h2>
+                            <h2>Ship Details</h2>
                             <p>
-                                100 meters of <span class="iron">iron</span><br>
-                                100 meters of <span class="crystals">crystal</span>
+                                Color <input type="text" class="color" id="color" value="#c6c6c6">
+                            </p>
+                            <p>
+                                Accent <input type="text" class="color" id="accent" value="#f0f0f0">
+                            </p>
+                        </li>
+                        <li>
+                            <h2>Ship Stats</h2>
+                            <p>
+                                <strong>100</strong> meters of <span class="iron">iron</span><br>
+                                <strong>100</strong> meters of <span class="crystals">crystal</span>
                             </p>
                             <hr>
                             <p>
-                                100 health &rarr; <span>+0</span><br>
-                                100 energy &rarr; <span>+0</span><br>
-                                5%/s energy regeneration &rarr; <span>+0</span><br>
-                                20 weapon power &rarr; <span>+0</span><br>
-                                300 m weapon range &rarr; <span>+0</span><br>
-                                25 m/s acceleration &rarr; <span>+0</span><br>
-                                120 deg/s rotation &rarr; <span>+0</span>
+                                <strong>100</strong> health <span class="pull-right">+0</span><br>
+                                <strong>100</strong> energy <span class="pull-right">+0</span><br>
+                                <strong>5%</strong>/s energy regeneration <span class="pull-right">+0</span><br>
+                                <strong>20</strong> weapon power <span class="pull-right">+0</span><br>
+                                <strong>300</strong> m weapon range <span class="pull-right">+0</span><br>
+                                <strong>25</strong> m/s acceleration <span class="pull-right">+0</span><br>
+                                <strong>120</strong> deg/s rotation <span class="pull-right">+0</span>
                             </p>
                         </li>
                         <li class="radio">
@@ -272,7 +322,7 @@
                             </p>
                         </li>
                         <li class="radio">
-                            <h2>Tech Slot 1</h2>
+                            <h2>Core Tech 1</h2>
                             <p>Choose your first core tech.</p>
                             <hr>
                             <p class="cost">
@@ -281,7 +331,7 @@
                             </p>
                         </li>
                         <li class="radio">
-                            <h2>Tech Slot 2</h2>
+                            <h2>Core Tech 2</h2>
                             <p>Choose your second core tech.</p>
                             <hr>
                             <p class="cost">
@@ -299,85 +349,16 @@
                         </li>
                 </div>
 
-                <!-- <div id="panelFuselage" class="tab-pnl pnl-freeform-sidebar">
-                    <div class="controls"></div>
-                    <div class="tech">
-                        <ul>
-                            <li>
-                                <h2>Stats</h2>
-                                <p>100 meters of iron &rarr; <span class="pull-right">100 health</span></p>
-                                <hr>
-                                <p class="cost">
-                                    Total Cost
-                                    <span class="gold">100 gold</span><br>
-                                    <span class="iron">100 iron</span>
-                                </p>
-                            </li>
-                            <li class="radio">
-                                <h2>Tech Slot 1</h2>
-                                <p>Choose your first core tech.</p>
-                                <hr>
-                                <p class="cost">
-                                    Price
-                                    <span class="gold">100 gold</span>
-                                </p>
-                            </li>
-                            <li class="radio">
-                                <h2>Tech Slot 2</h2>
-                                <p>Choose your second core tech.</p>
-                                <hr>
-                                <p class="cost">
-                                    Price
-                                    <span class="gold">200 gold</span>
-                                </p>
-                            </li>
-                    </div>
-                </div> -->
-
-                <div id="panelEngine" class="tab-pnl pnl-freeform">
-                    <div class="controls"></div>
-                </div>
-
-                <!-- <div id="panelWeapons" class="tab-pnl pnl-freeform-sidebar">
-                    <div class="controls"></div>
-                    <div class="tech">
-                        <ul>
-                            <li>
-                                <h2>Stats</h2>
-                                <p>70 meters of iron &rarr; <span>+100 health</span></p>
-                                <hr>
-                                <p class="cost">
-                                    Costing
-                                    <span class="gold">99 gold</span><br>
-                                    <span class="iron">99 iron</span>
-                                </p>
-                            </li>
-                            <li class="radio">
-                                <h2>Tech Option 1</h2>
-                                <p>Lorem ipsum dolor sit amet</p>
-                                <p><span>+99 stats</span></p>
-                            </li>
-                            <li class="radio">
-                                <h2>Tech Option 1</h2>
-                                <p>Lorem ipsum dolor sit amet</p>
-                                <p><span>+99 stats</span></p>
-                            </li>
-                    </div>
-                </div>
-
                 <div id="panelReactor" class="tab-pnl pnl-reactor">
-                    <div class="active-side">
-                    </div>
-                    <div class="mirrored-side">
-                    </div>
                     <div class="controls">
                         <div id="reactorShrink"></div>
                         <div id="reactorGrow"></div>
                     </div>
-                </div> -->
+                </div>
+
             </div>
             <div class="panel-close">
-                <div id="#closePanel">Build Ship</div>
+                <div id="closePanel">Build Ship</div>
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@ Game = function() {
     this.canvas = $('#canvas')[0];
     this.context = this.canvas.getContext('2d');
     this.input = null;
+    this.shipBuilder = new ShipBuilder();
     this.screen = {x: 0, y: 0};
     this.playername = 'anonymous';
 
@@ -91,7 +92,17 @@ Game = function() {
     };
 
     this.initDOM = function() {
+        var self = this;
+
         $(window).on('resize', this.resize);
+
+        $('#build').click( function() {
+            self.shipBuilder.open();
+        });
+
+        $('#closePanel').click( function() {
+            self.shipBuilder.close();
+        });
 
         $('#datasend').click( function() {
             var message = $('#data').val();
@@ -119,6 +130,8 @@ Game = function() {
                     window.setTimeout(callback, 1000 / 60);
                 };
         })();
+
+        this.resize();
 
         (function animloop(){
             requestAnimFrame(animloop);
@@ -152,14 +165,21 @@ Game = function() {
                 }
             }
         }
+        
+        this.shipBuilder.update();
+        this.shipBuilder.draw();
     };
 
     this.resize = function() {
-        var $window = $(window);
-
+        var $elem = $(window);
         $(this.canvas)
-        .attr('width', $window.width())
-        .attr('height', $window.height())
+        .attr('width', $elem.width())
+        .attr('height', $elem.height());
+
+        $elem = $('.active-side');
+        $('#tabPanel canvas')
+        .attr('width', $elem.width())
+        .attr('height', $elem.height());
     };
 
     this.init();
