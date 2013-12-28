@@ -44,13 +44,13 @@ Game = function() {
     this.initSocket = function() {
         var self = this;
 
-        var player = {
+        /*var player = {
             name: prompt("What's your name?", 'Anonymous'+((new Date()).getTime()>>4).toString(16)),
             type: 'player',
             pos: {x: 0, y: 0},
             last: {x: 0, y: 0},
             vel: {x: 0, y: 0},
-            speed: 0.25,
+            speed: 0.25, // divide by 100 - meters per second
             angle: 0,
             radius: 48,
             alive: true,
@@ -65,6 +65,8 @@ Game = function() {
         };
         this.playername = player.name;
         socket.emit('join', player);
+        $('.chat input').removeAttr('disabled');
+        */
 
         socket.on('updateentities', function (entities) {
             self.entities = entities;
@@ -130,8 +132,25 @@ Game = function() {
         }
 
         this.canvas.width = this.canvas.width;
+        var $tag;
         for(var i = 0; i < this.entities.length; i++) {
-            if( this.entities[i].type === 'player' ) Player.draw( this.entities[i] );
+            if( this.entities[i].type === 'player' ) {
+                Player.draw( this.entities[i] );
+
+                $tag = $('.t-'+this.entities[i].name);
+                if( $tag.length === 0 ) {
+                    $tag = $(document.createElement('div'));
+                    $tag
+                    .addClass('tag')
+                    .addClass('t-'+this.entities[i].name)
+                    .html(this.entities[i].name)
+                    .appendTo('body');
+                } else {
+                    $tag
+                    .css('top', this.entities[i].pos.y<<0+'px')
+                    .css('left', this.entities[i].pos.x<<0+'px');
+                }
+            }
         }
     };
 

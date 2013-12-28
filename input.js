@@ -8,7 +8,7 @@ Input = function() {
     };
 
     this.keydown = function(evt) {
-        keys[evt.keyCode] = -1;
+        if(!$('input').is(":focus")) keys[evt.keyCode] = -1;
     };
 
     this.keyup = function(evt) {

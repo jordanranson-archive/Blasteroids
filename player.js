@@ -17,7 +17,7 @@ Player.update = function(entity) {
         }
 
         // rotation
-        var rotationSpeed = 3;
+        var rotationSpeed = 2; // 120 / 60 - degrees per second / 60 seconds = 2;
         if( game.input.state(Key.a) ) {
             entity.angle = entity.angle-rotationSpeed<0?359:entity.angle-rotationSpeed;
         }
