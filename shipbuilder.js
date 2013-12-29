@@ -41,7 +41,7 @@ ShipBuilder = function() {
                     {x: -2, y: 1},
                     {x: 0, y: 1}
                 ],
-                color: '#777'
+                color: '#666666'
             },
             {
                 points: [
@@ -136,6 +136,10 @@ ShipBuilder = function() {
         $('#load').on('click', function() {
             self.loadPlayer();
         });
+
+        $('input[type=text]').on('change', function() {
+            self.player = self.generatePlayer();
+        });
     };
 
     this.open = function() {
@@ -157,15 +161,16 @@ ShipBuilder = function() {
         for( var name in localStorage ) {
             $('<option value="'+name+'">'+name+'</option>').appendTo($select);
         }
-
-        console.log( 'save', player );
     };
 
     this.loadPlayer = function() {
         var player = JSON.parse( localStorage.getItem($('#loadPlayername').val()) );
         this.player = player;
 
-        console.log( 'load', this.player );
+        $('#name').val( player.name );
+        $('#color').val( player.shapes[2].color );
+        $('#color2').val( player.shapes[1].color );
+        $('#accent').val( player.reactorColor );
     };
 
     this.generatePlayer = function() {
@@ -182,7 +187,7 @@ ShipBuilder = function() {
             shapes: [
                 {
                     points: this.player.shapes[0].points,
-                    color: '#666'
+                    color: '#666666'
                 },
                 {
                     points: this.player.shapes[1].points,
@@ -196,8 +201,6 @@ ShipBuilder = function() {
             reactorPos: this.player.reactorPos,
             reactorColor: $('#accent').val()
         };
-
-        console.log( 'generate', player );
         return player;
     };
 
@@ -246,7 +249,7 @@ ShipBuilder = function() {
         h = $('#grid').height()*.5 + 10;
 
         this.context[1].beginPath();
-        this.context[1].strokeStyle = '#666';
+        this.context[1].strokeStyle = this.player.shapes[0].color;
         this.context[1].lineWidth = 2;
         this.context[1].lineJoin = 'bevel';
 
@@ -269,7 +272,7 @@ ShipBuilder = function() {
          */
 
         this.context[2].beginPath();
-        this.context[2].strokeStyle = $('#color2').val();
+        this.context[2].strokeStyle = this.player.shapes[1].color;
         this.context[2].lineWidth = 2;
         this.context[2].lineJoin = 'bevel';
 
@@ -292,7 +295,7 @@ ShipBuilder = function() {
          */
 
         this.context[3].beginPath();
-        this.context[3].strokeStyle = $('#color').val();
+        this.context[3].strokeStyle = this.player.shapes[2].color;
         this.context[3].lineWidth = 2;
         this.context[3].lineJoin = 'bevel';
 
@@ -324,7 +327,7 @@ ShipBuilder = function() {
         this.context[4].translate(w, h+y);
         this.context[4].rotate(Math.radians(this.coreRotation));
 
-        this.context[4].strokeStyle = $('#accent').val();
+        this.context[4].strokeStyle = this.player.reactorColor;
         this.context[4].lineWidth = 2;
         this.context[4].regularPolygon(0, 0, 15, 3);
         this.context[4].stroke();
