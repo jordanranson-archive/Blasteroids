@@ -92,7 +92,6 @@ Player.render = function(entity) {
         context.stroke();
     }
 
-    console.log(canvas.toDataURL())
     return canvas;
 };
 

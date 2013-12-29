@@ -194,6 +194,7 @@ ShipBuilder = function() {
 
     this.loadPlayer = function() {
         var player = JSON.parse( localStorage.getItem($('#loadPlayername').val()) );
+        console.log( this.player, player );
         this.player = player;
 
         $('#name').val( player.name );
