@@ -69,7 +69,7 @@
         input[type=text].color {
             font-size: 8pt;
             padding: 0 2px;
-            width: 70px;
+            width: 75px;
             float: right;
             margin: 0;
             text-align: center;
@@ -130,7 +130,7 @@
             margin: 10px 0 0 0;
             text-align: center;
         }
-        .components li, .panel-close div {
+        .components li, .panel-close div, select {
             font-size: 14pt;
             border: solid 2px #242424;
             display: inline-block;
@@ -139,6 +139,10 @@
             padding: 2px 10px;
             border-radius: 100em;
             cursor: pointer;
+        }
+        select {
+            border-radius: 0;
+            padding: 2px;
         }
         .components li.active, .panel-close div.active {
             background: #242424;
@@ -190,7 +194,6 @@
             background: #000;
             box-sizing: border-box;
             padding: 10px;
-            overflow-y: auto;
         }
         .tech ul {
             margin: 0;
@@ -206,7 +209,7 @@
         }
         .tech li.radio {
             border: solid 2px #242424;
-            padding: 5px;
+            padding: 5px 5px 0 5px;
         }
         .tech h2 {
             color: #ccc;
@@ -245,7 +248,10 @@
         .cost span {
             float: right;
         }
-        span.pull-right {
+        .pull-left {
+            float: left;
+        }
+        .pull-right {
             float: right;
         }
         strong {
@@ -288,11 +294,11 @@
                     <ul>
                         <li>
                             <h2>Ship Details</h2>
-                            <p>
-                                Color <input type="text" class="color" id="color" value="#cccccc">
-                            </p>
-                            <p>
-                                Accent <input type="text" class="color" id="accent" value="#ccffff">
+                            <p style="line-height: 1.45em">
+                                Ship Name <input type="text" class="color" id="name" value="anonymous"><br>
+                                Primary Color <input type="text" class="color" id="color" value="#999999"><br>
+                                Secondary Color <input type="text" class="color" id="color2" value="#444444"><br>
+                                Accent Color <input type="text" class="color" id="accent" value="#aaeeff">
                             </p>
                         </li>
                         <li>
@@ -358,7 +364,10 @@
 
             </div>
             <div class="panel-close">
-                <div id="closePanel">Build Ship</div>
+                <select id="loadPlayername" class="pull-left"></select>
+                <div id="load" class="pull-left" style="width:7%">Load</div>
+                <div id="save" class="pull-left" style="width:7%">Save</div>
+                <div id="closePanel" class="pull-right">Launch Ship</div>
             </div>
         </div>
     </div>

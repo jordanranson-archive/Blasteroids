@@ -58,32 +58,32 @@ Player.render = function(entity) {
 
     var context = canvas.getContext('2d');
 
-    var points = [
-        {x: 48, y: 92},
-        {x: 12, y: 92},
-        {x: 48, y: 4},
-        {x: 84, y: 92},
-        {x: 48, y: 92}
-    ];
+    var i, k, x, y;
 
-    var options = {
-        color: game.playername===entity.name?'#8cc152':'#777',
-        width: 2
-    };
 
-    context.save();
+    /*
+     * draw entity shapes
+     */
 
-    context.strokeStyle = options.color;
-    context.lineWidth = options.width;
+    context.lineWidth = 2;
+    context.lineJoin = 'bevel';
+    for ( i = 0; i < entity.shapes.length; i++ ) {
+        context.beginPath();
+        context.strokeStyle = entity.shapes[i].color;
 
-    context.beginPath();
-    context.moveTo(points[0].x, points[0].y);
-    for(var i = 0; i < points.length; i++) {
-        context.lineTo(points[i].x, points[i].y);
+        context.moveTo(entity.radius+(entity.shapes[0].x*game._scalar), entity.radius+(entity.shapes[0].y*game._scalar));
+        for( k = 0; k < entity.shapes.length; k++ ) {
+            x = entity.radius+(entity.shapes[i].points[k].x*game._scalar);
+            y = entity.radius+(entity.shapes[i].points[k].y*game._scalar);
+            context.lineTo(x, y);
+        }
+        for( k = entity.shapes.length-2; k >= 0; k-- ) {
+            x = entity.radius+(entity.shapes[i].points[k].x*game._scalar)*-1;
+            y = entity.radius+(entity.shapes[i].points[k].y*game._scalar);
+            context.lineTo(x, y);
+        }
+        context.stroke();
     }
-    context.stroke();
-
-    context.restore();
 
     return canvas;
 };
@@ -102,7 +102,32 @@ Player.draw = function(entity) {
     game.context.translate(entity.radius, entity.radius);
     game.context.rotate(Math.radians(entity.angle+90));
 
+
+    /* 
+     * draw ship
+     */
+
     game.context.drawImage(game.entityCanvas[entity.name], -entity.radius, -entity.radius);
+
+
+    /* 
+     * draw reactor cores
+     */
+
+    y = entity.reactorPos*game._scalar;
+
+    game.context.save();
+
+    game.context.translate(0, y);
+    game.context.rotate(Math.radians(this.coreRotation));
+
+    game.context.strokeStyle = entity.reactorColor;
+    game.context.lineWidth = 2;
+    game.context.regularPolygon(0, 0, 15, 3);
+    game.context.stroke();
+
+    context.restore();
+
 
     game.context.restore();
 };

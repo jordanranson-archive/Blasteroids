@@ -14,44 +14,67 @@ ShipBuilder = function() {
         $('#reactor')[0].getContext('2d')
     ];
 
-    this.paths = [
-        [],
-        [   // default fuselage
-            // start and end x must be 0
-            {x: 0, y: -4},
-            {x: -1, y: -4},
-            {x: -2, y: -3},
-            {x: -2, y: -1},
-            {x: -1, y: 0},
-            {x: 0, y: 0},
-            {x: -2, y: 0},
-            {x: -2, y: 1},
-            {x: 0, y: 1}
+    this.grid = [];
+
+    this.player = {   
+        name: 'anonymous',
+        type: 'player',
+        pos: {x: 0, y: 0},
+        last: {x: 0, y: 0},
+        vel: {x: 0, y: 0},
+        speed: 0,
+        angle: 0,
+        radius: 0,
+        alive: true,
+        shapes: [
+            {
+                // default fuselage
+                // start and end x must be 0
+                points: [
+                    {x: 0, y: -4},
+                    {x: -1, y: -4},
+                    {x: -2, y: -3},
+                    {x: -2, y: -1},
+                    {x: -1, y: 0},
+                    {x: 0, y: 0},
+                    {x: -2, y: 0},
+                    {x: -2, y: 1},
+                    {x: 0, y: 1}
+                ],
+                color: '#777'
+            },
+            {
+                points: [
+                    // default engine
+                    // start and end x must be 0
+                    {x: 0, y: 1},
+                    {x: -1, y: 1},
+                    {x: -1, y: 2},
+                    {x: -2, y: 3},
+                    {x: -2, y: 5},
+                    {x: 0, y: 5},
+                    {x: -1, y: 4},
+                    {x: 0, y: 4}
+                ],
+                color: $('#color2').val()
+            },
+            {
+                points: [
+                    // default weapons
+                    // start and end x must be within ship hitbox
+                    {x: -1, y: 0},
+                    {x: -2, y: -1},
+                    {x: -3, y: -1},
+                    {x: -5, y: 1},
+                    {x: -2, y: 1},
+                    {x: -1, y: 0}
+                ],
+                color: $('#color').val()
+            }
         ],
-        [
-            // default engine
-            // start and end x must be 0
-            {x: 0, y: 1},
-            {x: -1, y: 1},
-            {x: -1, y: 2},
-            {x: -2, y: 3},
-            {x: -2, y: 5},
-            {x: 0, y: 5},
-            {x: -1, y: 4},
-            {x: 0, y: 4}
-        ],
-        [
-            // default weapons
-            // start and end x must be within ship hitbox
-            {x: -1, y: 0},
-            {x: -2, y: -1},
-            {x: -3, y: -1},
-            {x: -5, y: 1},
-            {x: -2, y: 1},
-            {x: -1, y: 0}
-        ],
-        [{x: 0, y: -2}]
-    ];
+        reactorPos: -2,
+        reactorColor: $('#accent').val()
+    };
 
     this.init = function() {
         var self = this;
@@ -87,15 +110,32 @@ ShipBuilder = function() {
 
         $('#tabFuselage').click();
 
+        var $select = $('#loadPlayername');
+        for( var name in localStorage ) {
+            $('<option value="'+name+'">'+name+'</option>').appendTo($select);
+        }
+
         var width = (this.$container.width()/20)<<0;
         var height = (this.$container.height()/20)<<0;
 
         // generate grid
         for( var x = 0; x < width; x++ ) {
             for( var y = 0; y < height; y++ ) {
-                this.paths[0].push({ x: x*20, y: y*20 });
+                this.grid.push({ x: x*20, y: y*20 });
             }
         }
+
+        $('#closePanel').on('click', function() {
+            self.buildShip();
+        });
+
+        $('#save').on('click', function() {
+            self.savePlayer( self.generatePlayer() );
+        });
+
+        $('#load').on('click', function() {
+            self.loadPlayer();
+        });
     };
 
     this.open = function() {
@@ -107,6 +147,62 @@ ShipBuilder = function() {
     this.close = function() {
         this.isOpen = false;
         this.$container.hide();
+    };
+
+    this.savePlayer = function(player) {
+        localStorage.setItem( player.name, JSON.stringify(player) );
+
+        var $select = $('#loadPlayername');
+        $select.html('');
+        for( var name in localStorage ) {
+            $('<option value="'+name+'">'+name+'</option>').appendTo($select);
+        }
+
+        console.log( 'save', player );
+    };
+
+    this.loadPlayer = function() {
+        var player = JSON.parse( localStorage.getItem($('#loadPlayername').val()) );
+        this.player = player;
+
+        console.log( 'load', this.player );
+    };
+
+    this.generatePlayer = function() {
+        var player = {   
+            name: $('#name').val(),
+            type: 'player',
+            pos: {x: 0, y: 0},
+            last: {x: 0, y: 0},
+            vel: {x: 0, y: 0},
+            speed: this.player.speed,
+            angle: 0,
+            radius: this.player.radius,
+            alive: true,
+            shapes: [
+                {
+                    points: this.player.shapes[0].points,
+                    color: '#666'
+                },
+                {
+                    points: this.player.shapes[1].points,
+                    color: $('#color2').val()
+                },
+                {
+                    points: this.player.shapes[2].points,
+                    color: $('#color').val()
+                }
+            ],
+            reactorPos: this.player.reactorPos,
+            reactorColor: $('#accent').val()
+        };
+
+        console.log( 'generate', player );
+        return player;
+    };
+
+    this.buildShip = function() {
+
     };
 
     this.update = function() {
@@ -129,14 +225,15 @@ ShipBuilder = function() {
             .attr('height', $this.height());
         });
 
+
         /*
          * draw grid
          */
 
         this.context[0].fillStyle = '#333';
-        for( i = 0; i < this.paths[0].length; i++ ) {
-            x = this.paths[0][i].x;
-            y = this.paths[0][i].y;
+        for( i = 0; i < this.grid.length; i++ ) {
+            x = this.grid[i].x;
+            y = this.grid[i].y;
             this.context[0].fillRect(x, y, 1, 1);
         }
 
@@ -153,15 +250,15 @@ ShipBuilder = function() {
         this.context[1].lineWidth = 2;
         this.context[1].lineJoin = 'bevel';
 
-        this.context[1].moveTo(w+(this.paths[1][0].x*20), h+(this.paths[1][0].y*20));
-        for( i = 0; i < this.paths[1].length; i++ ) {
-            x = w+(this.paths[1][i].x*20);
-            y = h+(this.paths[1][i].y*20);
+        this.context[1].moveTo(w+(this.player.shapes[0].points[0].x*20), h+(this.player.shapes[0].points[0].y*20));
+        for( i = 0; i < this.player.shapes[0].points.length; i++ ) {
+            x = w+(this.player.shapes[0].points[i].x*20);
+            y = h+(this.player.shapes[0].points[i].y*20);
             this.context[1].lineTo(x, y);
         }
-        for( i = this.paths[1].length-2; i >= 0; i-- ) {
-            x = w+(this.paths[1][i].x*20)*-1;
-            y = h+(this.paths[1][i].y*20);
+        for( i = this.player.shapes[0].points.length-2; i >= 0; i-- ) {
+            x = w+(this.player.shapes[0].points[i].x*20)*-1;
+            y = h+(this.player.shapes[0].points[i].y*20);
             this.context[1].lineTo(x, y);
         }
         this.context[1].stroke();
@@ -172,19 +269,19 @@ ShipBuilder = function() {
          */
 
         this.context[2].beginPath();
-        this.context[2].strokeStyle = $('#color').val().brightness(-20);
+        this.context[2].strokeStyle = $('#color2').val();
         this.context[2].lineWidth = 2;
         this.context[2].lineJoin = 'bevel';
 
-        this.context[2].moveTo(w+(this.paths[2][0].x*20), h+(this.paths[2][0].y*20));
-        for( i = 0; i < this.paths[2].length; i++ ) {
-            x = w+(this.paths[2][i].x*20);
-            y = h+(this.paths[2][i].y*20);
+        this.context[2].moveTo(w+(this.player.shapes[1].points[0].x*20), h+(this.player.shapes[1].points[0].y*20));
+        for( i = 0; i < this.player.shapes[1].points.length; i++ ) {
+            x = w+(this.player.shapes[1].points[i].x*20);
+            y = h+(this.player.shapes[1].points[i].y*20);
             this.context[2].lineTo(x, y);
         }
-        for( i = this.paths[2].length-2; i >= 0; i-- ) {
-            x = w+(this.paths[2][i].x*20)*-1;
-            y = h+(this.paths[2][i].y*20);
+        for( i = this.player.shapes[1].points.length-2; i >= 0; i-- ) {
+            x = w+(this.player.shapes[1].points[i].x*20)*-1;
+            y = h+(this.player.shapes[1].points[i].y*20);
             this.context[2].lineTo(x, y);
         }
         this.context[2].stroke();
@@ -199,18 +296,18 @@ ShipBuilder = function() {
         this.context[3].lineWidth = 2;
         this.context[3].lineJoin = 'bevel';
 
-        this.context[3].moveTo(w+(this.paths[3][0].x*20), h+(this.paths[3][0].y*20));
-        for( i = 0; i < this.paths[3].length; i++ ) {
-            x = w+(this.paths[3][i].x*20);
-            y = h+(this.paths[3][i].y*20);
+        this.context[3].moveTo(w+(this.player.shapes[2].points[0].x*20), h+(this.player.shapes[2].points[0].y*20));
+        for( i = 0; i < this.player.shapes[2].points.length; i++ ) {
+            x = w+(this.player.shapes[2].points[i].x*20);
+            y = h+(this.player.shapes[2].points[i].y*20);
             this.context[3].lineTo(x, y);
         }
         this.context[3].stroke();
 
         this.context[3].beginPath();
-        for( i = this.paths[3].length-1; i >= 0; i-- ) {
-            x = w+(this.paths[3][i].x*20)*-1;
-            y = h+(this.paths[3][i].y*20);
+        for( i = this.player.shapes[2].points.length-1; i >= 0; i-- ) {
+            x = w+(this.player.shapes[2].points[i].x*20)*-1;
+            y = h+(this.player.shapes[2].points[i].y*20);
             this.context[3].lineTo(x, y);
         }
         this.context[3].stroke();
@@ -220,7 +317,7 @@ ShipBuilder = function() {
          * draw reactor cores
          */
 
-        y = this.paths[4][0].y*20;
+        y = this.player.reactorPos*20;
 
         this.context[4].save();
 

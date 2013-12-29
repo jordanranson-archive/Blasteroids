@@ -6,6 +6,8 @@ Game = function() {
     this.screen = {x: 0, y: 0};
     this.playername = 'anonymous';
 
+    this._scalar = 10;
+
     this.entities = [];
     this.entityCanvas = {};
 
@@ -28,7 +30,9 @@ Game = function() {
                 ],
                 color: '#fff'
             }
-        ]
+        ],
+        reactorPos: 0,
+        reactorColor: '#fff'
     }
 
     */
