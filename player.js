@@ -31,13 +31,20 @@ Player.update = function(entity) {
         }
     }
 
+    // clamp velocity
+    var maxVel = entity.speed * 45;
+    if( entity.vel.x >  maxVel )  entity.vel.x =  maxVel;
+    if( entity.vel.x < -maxVel )  entity.vel.x = -maxVel;
+    if( entity.vel.y >  maxVel )  entity.vel.y =  maxVel;
+    if( entity.vel.y < -maxVel )  entity.vel.y = -maxVel;
+
     // update position
     entity.pos.x += entity.vel.x;
     entity.pos.y += entity.vel.y;
 
     // decay velocity
-    entity.vel.x *= .99;
-    entity.vel.y *= .99;
+    entity.vel.x *= .995;
+    entity.vel.y *= .995;
 
     // send to server
     if( entity.pos.x<<0 !== entity.last.x<<0 || entity.pos.y<<0 !== entity.last.y<<0 ) {
@@ -58,7 +65,7 @@ Player.render = function(entity) {
 
     var context = canvas.getContext('2d');
 
-    var i, k, x, y;
+    var i, x, y;
 
 
     /*
@@ -71,20 +78,21 @@ Player.render = function(entity) {
         context.beginPath();
         context.strokeStyle = entity.shapes[i].color;
 
-        context.moveTo(entity.radius+(entity.shapes[0].x*game._scalar), entity.radius+(entity.shapes[0].y*game._scalar));
-        for( k = 0; k < entity.shapes.length; k++ ) {
+        context.moveTo(entity.radius+(entity.shapes[i].points[0].x*game._scalar), entity.radius+(entity.shapes[i].points[0].y*game._scalar));
+        for( var k = 0; k < entity.shapes[i].points.length; k++ ) {
             x = entity.radius+(entity.shapes[i].points[k].x*game._scalar);
             y = entity.radius+(entity.shapes[i].points[k].y*game._scalar);
             context.lineTo(x, y);
         }
-        for( k = entity.shapes.length-2; k >= 0; k-- ) {
-            x = entity.radius+(entity.shapes[i].points[k].x*game._scalar)*-1;
+        for( var k = entity.shapes[i].points.length-1; k >= 0; k-- ) {
+            x = entity.radius+((entity.shapes[i].points[k].x*game._scalar)*-1);
             y = entity.radius+(entity.shapes[i].points[k].y*game._scalar);
             context.lineTo(x, y);
         }
         context.stroke();
     }
 
+    console.log(canvas.toDataURL())
     return canvas;
 };
 
@@ -118,15 +126,16 @@ Player.draw = function(entity) {
 
     game.context.save();
 
+    var time = new Date().getTime() * 0.1;
     game.context.translate(0, y);
-    game.context.rotate(Math.radians(this.coreRotation));
+    game.context.rotate(Math.radians( time % 360 ));
 
     game.context.strokeStyle = entity.reactorColor;
     game.context.lineWidth = 2;
-    game.context.regularPolygon(0, 0, 15, 3);
+    game.context.regularPolygon(0, 0, 7.5, 3);
     game.context.stroke();
 
-    context.restore();
+    game.context.restore();
 
 
     game.context.restore();

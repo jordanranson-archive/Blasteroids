@@ -22,9 +22,9 @@ ShipBuilder = function() {
         pos: {x: 0, y: 0},
         last: {x: 0, y: 0},
         vel: {x: 0, y: 0},
-        speed: 0,
+        speed: 0.05,
         angle: 0,
-        radius: 0,
+        radius: 60,
         alive: true,
         shapes: [
             {
@@ -115,6 +115,33 @@ ShipBuilder = function() {
             $('<option value="'+name+'">'+name+'</option>').appendTo($select);
         }
 
+        $('#name').val('anon'+((new Date()).getTime()>>4).toString(16));
+
+        var r = ((Math.random()*192<<0)+64).toString(16),
+            g = ((Math.random()*192<<0)+64).toString(16),
+            b = ((Math.random()*192<<0)+64).toString(16);
+        if( r.length === 1 ) r += '0';
+        if( g.length === 1 ) g += '0';
+        if( b.length === 1 ) b += '0';
+        $('#color').val( '#'+r+g+b );
+
+        r = ((Math.random()*128<<0)+64).toString(16),
+        g = ((Math.random()*128<<0)+64).toString(16),
+        b = ((Math.random()*128<<0)+64).toString(16);
+        if( r.length === 1 ) r += '0';
+        if( g.length === 1 ) g += '0';
+        if( b.length === 1 ) b += '0';
+        $('#color2').val( '#'+r+g+b );
+
+        r = ((Math.random()*64<<0)+192).toString(16),
+        g = ((Math.random()*64<<0)+192).toString(16),
+        b = ((Math.random()*64<<0)+192).toString(16);
+        console.log( (Math.random()*32<<0)+224 )
+        if( r.length === 1 ) r += '0';
+        if( g.length === 1 ) g += '0';
+        if( b.length === 1 ) b += '0';
+        $('#accent').val( '#'+r+g+b );
+
         var width = (this.$container.width()/20)<<0;
         var height = (this.$container.height()/20)<<0;
 
@@ -140,6 +167,8 @@ ShipBuilder = function() {
         $('input[type=text]').on('change', function() {
             self.player = self.generatePlayer();
         });
+
+        $('input[type=text]').trigger('change');
     };
 
     this.open = function() {
@@ -205,7 +234,11 @@ ShipBuilder = function() {
     };
 
     this.buildShip = function() {
+        var player = this.generatePlayer();
 
+        game.playername = player.name;
+        socket.emit('join', player);
+        $('.chat input').removeAttr('disabled');
     };
 
     this.update = function() {

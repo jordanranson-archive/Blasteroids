@@ -1,3 +1,16 @@
+CanvasRenderingContext2D.prototype.regularPolygon = function(x, y, radius, sides) {
+    if (sides < 3) return;
+
+    this.beginPath();
+    var a = ((Math.PI * 2)/sides);
+    this.translate(x, y);
+    this.moveTo(radius,0);
+    for (var i = 1; i < sides; i++) {
+        this.lineTo(radius*Math.cos(a*i),radius*Math.sin(a*i));
+    }
+    this.closePath();
+};
+
 Game = function() {
     this.canvas = $('#canvas')[0];
     this.context = this.canvas.getContext('2d');
@@ -164,8 +177,8 @@ Game = function() {
                     .appendTo('body');
                 } else {
                     $tag
-                    .css('top', this.entities[i].pos.y<<0+'px')
-                    .css('left', this.entities[i].pos.x<<0+'px');
+                    .css('top', this.entities[i].pos.y<<0 + 'px')
+                    .css('left', ((this.entities[i].pos.x<<0) + this.entities[i].radius - ($tag.width()*.5)) + 'px');
                 }
             }
         }
