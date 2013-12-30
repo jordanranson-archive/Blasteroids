@@ -94,6 +94,10 @@ Game = function() {
             self.entities.update(entity.name, entity);
         });
 
+        socket.on('removeplayer', function (playername) {
+            $('.t-'+playername).remove();
+        });
+
         socket.on('updatechat', function (playername, data) {
             var $msg = $('<span class="f"><b>&lt;'+ playername + '&gt;</b> ' + data + '</span><br>');
             var $conversation = $('#conversation');
@@ -149,6 +153,7 @@ Game = function() {
         })();
 
         this.resize();
+        self.shipBuilder.open();
 
         (function animloop(){
             requestAnimFrame(animloop);

@@ -265,7 +265,7 @@
 <body>
     <div class="menu">
         <ul class="components">
-            <li id="build">Build Ship</li>
+            <li id="build">Ship Menu</li>
         </ul>
     </div>
     <div class="wrapper wrp-shipbuilder" id="wrapper">
@@ -304,53 +304,70 @@
                         <li>
                             <h2>Ship Stats</h2>
                             <p>
-                                <strong>100</strong> meters of <span class="iron">iron</span><br>
-                                <strong>100</strong> meters of <span class="crystals">crystal</span>
+                                <strong>320</strong> m<sup>3</sup> of <span class="iron">iron</span><span class="gold pull-right">320 gold</span><br>
+                                <strong>30</strong> m<sup>3</sup> of <span class="crystals">crystal</span><span class="gold pull-right">30 gold</span>
                             </p>
                             <hr>
                             <p>
-                                <strong>100</strong> health <span class="pull-right">+0</span><br>
-                                <strong>100</strong> energy <span class="pull-right">+0</span><br>
-                                <strong>5%</strong>/s energy regeneration <span class="pull-right">+0</span><br>
-                                <strong>20</strong> weapon power <span class="pull-right">+0</span><br>
-                                <strong>300</strong> m weapon range <span class="pull-right">+0</span><br>
-                                <strong>25</strong> m/s acceleration <span class="pull-right">+0</span><br>
-                                <strong>120</strong> deg/s rotation <span class="pull-right">+0</span>
+                                <strong>120</strong> health <span class="pull-right">+10</span><br>
+                                <!-- fuselage: 10 health / 10 iron -->
+
+                                <strong>30</strong> energy <span class="pull-right">+0</span><br>
+                                <!-- reactor: 10 health / 10 crystal -->
+
+                                <strong>3%</strong>/s energy regeneration <span class="pull-right">+0</span><br>
+                                <!-- reactor: 1% / 10 crystal -->
+
+                                <strong>10</strong> weapon power <span class="pull-right">+0</span><br>
+                                <!-- weapons: 1 power / 10 iron -->
+                                <!-- weapons: 2 power / 10 crystal -->
+
+                                <strong>100</strong> m weapon range <span class="pull-right">+0</span><br>
+                                <!-- weapons: 10 m / 10 iron -->
+                                <!-- weapons: 20 m / 10 crystal -->
+
+                                <strong>50</strong> m/s speed <span class="pull-right">+0</span><br>
+                                <!-- engine: 5 m/s / 10 iron -->
+                                <!-- engine: 10 m/s / 10 crystal -->
+
+                                <strong>100</strong> deg/s rotation <span class="pull-right">+0</span>
+                                <!-- engine: 10 deg / 10 iron -->
+                                <!-- engine: 20 deg / 10 crystal -->
                             </p>
                         </li>
                         <li class="radio">
                             <h2>Weapon Tech</h2>
-                            <p>Choose your weapon tech.</p>
+                            <p>Unavailable. Requires larger weapons.</p><!-- 
                             <hr>
                             <p class="cost">
                                 Price
                                 <span class="gold">100 gold</span>
-                            </p>
+                            </p> -->
                         </li>
                         <li class="radio">
                             <h2>Core Tech 1</h2>
-                            <p>Choose your first core tech.</p>
+                            <p>Unavailable. Requires larger fuselage.</p><!-- 
                             <hr>
                             <p class="cost">
                                 Price
                                 <span class="gold">100 gold</span>
-                            </p>
+                            </p> -->
                         </li>
                         <li class="radio">
                             <h2>Core Tech 2</h2>
-                            <p>Choose your second core tech.</p>
+                            <p>Unavailable. Requires larger fuselage.</p><!-- 
                             <hr>
                             <p class="cost">
                                 Price
                                 <span class="gold">200 gold</span>
-                            </p>
+                            </p> -->
                         </li>
                         <li>
                             <p class="cost">
                                 Total Ship Cost
-                                <span class="gold">150 gold</span><br>
-                                <span class="iron">100 iron</span><br>
-                                <span class="crystals">50 crystals</span>
+                                <span class="gold">350 gold</span><br>
+                                <span class="iron">320 iron</span><br>
+                                <span class="crystals">30 crystals</span>
                             </p>
                         </li>
                 </div>

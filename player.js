@@ -1,5 +1,10 @@
 Player = {};
 
+Player.collide = function(entity) {
+    var x = -entity.radius, 
+        y = -entity.radius-(game._scalar*.5);
+}
+
 Player.update = function(entity) {
     if( !entity.alive ) return entity;
 
@@ -114,7 +119,24 @@ Player.draw = function(entity) {
      * draw ship
      */
 
-    game.context.drawImage(game.entityCanvas[entity.name], -entity.radius, -entity.radius);
+    game.context.drawImage(game.entityCanvas[entity.name], -entity.radius, -entity.radius-(game._scalar*.5));
+
+
+    /* 
+     * draw hitbox
+     */
+
+    // game.context.save();
+
+    // game.context.strokeStyle = '#999';
+    // game.context.globalAlpha = 0.5;
+    // game.context.setLineDash([2,3]);
+    // game.context.lineWidth = 1;
+    // game.context.beginPath();
+    // game.context.arc(0,0,entity.radius*.7,0,2*Math.PI);
+    // game.context.stroke();
+
+    // game.context.restore();
 
 
     /* 

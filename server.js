@@ -47,6 +47,7 @@ io.sockets.on('connection', function(socket) {
 
         // Remove player
         entities.remove(socket.playername);
+        io.sockets.in(socket.room).emit('removeplayer', socket.playername);
         io.sockets.in(socket.room).emit('updateentities', entities);
     });
 

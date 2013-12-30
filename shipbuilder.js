@@ -136,7 +136,6 @@ ShipBuilder = function() {
         r = ((Math.random()*64<<0)+192).toString(16),
         g = ((Math.random()*64<<0)+192).toString(16),
         b = ((Math.random()*64<<0)+192).toString(16);
-        console.log( (Math.random()*32<<0)+224 )
         if( r.length === 1 ) r += '0';
         if( g.length === 1 ) g += '0';
         if( b.length === 1 ) b += '0';
