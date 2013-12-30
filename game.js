@@ -86,6 +86,12 @@ Game = function() {
         $('.chat input').removeAttr('disabled');
         */
 
+        socket.on('joined', function() {
+            setInterval(function() {
+                socket.emit('ping');
+            }, 5);
+        });
+
         socket.on('updateentities', function (entities) {
             self.entities = entities;
         });

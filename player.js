@@ -143,7 +143,7 @@ Player.draw = function(entity) {
      * draw reactor cores
      */
 
-    y = entity.reactorPos*game._scalar;
+    y = entity.reactorPos*game._scalar - (game._scalar*.5);
 
     game.context.save();
 
