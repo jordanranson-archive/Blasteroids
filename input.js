@@ -1,6 +1,7 @@
 Input = function() {
 
     var keys = [];
+    var prev = 0;
     
     this.init = function() {
         $(document).on('keydown', this.keydown);
@@ -8,10 +9,14 @@ Input = function() {
     };
 
     this.keydown = function(evt) {
+        if( evt.keyCode === prev && keys[evt.keyCode] !== undefined ) return false;
+        else prev = evt.keyCode;
+
         if(!$('input').is(":focus")) keys[evt.keyCode] = -1;
     };
 
     this.keyup = function(evt) {
+        prev = 0;
         delete keys[evt.keyCode];
     };
 
