@@ -17,8 +17,8 @@ Player.update = function(entity) {
             entity.vel.y += Math.sin(Math.radians(entity.angle))*entity.speed;
         }
         if( game.input.state(Key.s) ) {
-            entity.vel.x -= Math.cos(Math.radians(entity.angle))*entity.speed;
-            entity.vel.y -= Math.sin(Math.radians(entity.angle))*entity.speed;
+            entity.vel.x -= Math.cos(Math.radians(entity.angle))*(entity.speed*.6);
+            entity.vel.y -= Math.sin(Math.radians(entity.angle))*(entity.speed*.6);
         }
 
         // rotation
@@ -30,14 +30,44 @@ Player.update = function(entity) {
             entity.angle = entity.angle+rotationSpeed>359?0:entity.angle+rotationSpeed;
         }
 
-        // abilities
+        // attack
         if( game.input.pressed(Key.space) ) {
-            console.log('attack')
+
+            var x = (entity.pos.x + entity.radius) + (entity.radius * Math.cos(Math.radians(entity.angle))),
+                y = (entity.pos.y + entity.radius) + (entity.radius * Math.sin(Math.radians(entity.angle)));
+            
+            var time = (new Date()).getTime();
+            var projectile = {
+                name: 'p'+time,
+                type: 'projectile',
+                tech: 'none',
+                owner: entity.name,
+                pos: {x: x, y: y},
+                last: {x: y, y: y},
+                vel: {x: 0, y: 0},
+                speed: 0,
+                angle: entity.angle,
+                alive: true,
+                spawned: time,
+                color: entity.reactorColor
+            };
+
+            game.spawnEntity( projectile );
+        }
+
+        // use tech
+        if( game.input.pressed(Key.shift) ) {
+            console.log('tech')
+        }
+
+        // switch tech
+        if( game.input.pressed(Key.q) ) {
+            console.log('switch tech')
         }
     }
 
     // clamp velocity
-    var maxVel = entity.speed * 45;
+    var maxVel = entity.speed * 40;
     if( entity.vel.x >  maxVel )  entity.vel.x =  maxVel;
     if( entity.vel.x < -maxVel )  entity.vel.x = -maxVel;
     if( entity.vel.y >  maxVel )  entity.vel.y =  maxVel;
@@ -48,8 +78,8 @@ Player.update = function(entity) {
     entity.pos.y += entity.vel.y;
 
     // decay velocity
-    entity.vel.x *= .995;
-    entity.vel.y *= .995;
+    entity.vel.x *= .997;
+    entity.vel.y *= .997;
 
     // send to server
     if( entity.pos.x<<0 !== entity.last.x<<0 || entity.pos.y<<0 !== entity.last.y<<0 ) {
@@ -119,6 +149,8 @@ Player.draw = function(entity) {
      * draw ship
      */
 
+
+    game.context.globalAlpha = 1;
     game.context.drawImage(game.entityCanvas[entity.name], -entity.radius, -entity.radius-(game._scalar*.5));
 
 
@@ -153,10 +185,69 @@ Player.draw = function(entity) {
 
     game.context.strokeStyle = entity.reactorColor;
     game.context.lineWidth = 2;
+    game.context.fillStyle = 'transparent';
+    game.context.globalAlpha = Math.random()*.5+.5;
     game.context.regularPolygon(0, 0, 7.5, 3);
     game.context.stroke();
 
     game.context.restore();
+
+
+    /* 
+     * draw jet flames
+     */
+
+    if( entity.name === game.playername && game.input.state(Key.w) ) {
+        y = entity.radius*.9;
+        var sin = Math.sin(time*.9);
+
+        game.context.save();
+
+        game.context.translate(0, y);
+
+        game.context.strokeStyle = entity.reactorColor;
+        game.context.lineWidth = 2;
+        
+        game.context.beginPath();
+        game.context.globalAlpha = sin<.5 ? 0 : .7;
+        game.context.moveTo(-game._scalar, 0);
+        game.context.lineTo(0, 1.8*game._scalar);
+        game.context.lineTo(game._scalar, 0);
+        game.context.stroke();
+        game.context.closePath();
+
+        game.context.beginPath();
+        game.context.globalAlpha = sin<.5 ? 1 : 0;
+        game.context.moveTo(-.4*game._scalar, 0);
+        game.context.lineTo(0, .6*game._scalar);
+        game.context.lineTo(.4*game._scalar, 0);
+        game.context.stroke();
+        game.context.closePath();
+
+        game.context.restore();
+    }
+
+    if( entity.name === game.playername && game.input.state(Key.s) ) {
+        y = -entity.radius*.9;
+        var sin = Math.sin(time*.9);
+
+        game.context.save();
+
+        game.context.translate(0, y);
+
+        game.context.strokeStyle = entity.reactorColor;
+        game.context.lineWidth = 2;
+
+        game.context.beginPath();
+        game.context.globalAlpha = sin<.5 ? .7 : 0;
+        game.context.moveTo(-.4*game._scalar, 0);
+        game.context.lineTo(0, -.6*game._scalar);
+        game.context.lineTo(.4*game._scalar, 0);
+        game.context.stroke();
+        game.context.closePath();
+
+        game.context.restore();
+    }
 
 
     game.context.restore();

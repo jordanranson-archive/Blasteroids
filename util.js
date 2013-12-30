@@ -20,10 +20,15 @@ Array.prototype.indexOfName = function(name) {
 Array.prototype.remove = function(name) {
     var index = this.indexOfName(name);
     if( index !== -1 ) this.splice(index, 1);
+
+    return index;
 };
 
 Array.prototype.update = function(name, data) {
-    this[this.indexOf(this.find(name))] = data;
+    var index = this.indexOf(this.find(name));
+    this[index] = data;
+
+    return index;
 };
 
 String.prototype.brightness = function(percent) {   

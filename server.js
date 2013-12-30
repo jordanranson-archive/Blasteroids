@@ -3,9 +3,9 @@ require('./util.js');
 
 var entities = [];
 
-function disconnect(socket) {
+function disconnect(socket, message) {
         // Goodbye message
-        socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + ' warped out.');
+        socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + message);
         socket.leave(socket.room);
 
         // Remove player
@@ -41,21 +41,33 @@ io.sockets.on('connection', function(socket) {
         socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + ' warped in.');
 
         heartbeat = setTimeout(function() {
-            disconnect(socket);
-        }, 30);
+            disconnect(socket, ' timed out.');
+        }, 30000);
     });
 
     socket.on('ping', function() {
         clearTimeout(heartbeat);
         heartbeat = setTimeout(function() {
-            disconnect(socket);
-        }, 30);
+            disconnect(socket, ' timed out.');
+        }, 30000);
     });
 
     // Update an entity
     socket.on('updateentity', function(entity) {
         entities.update(entity.name, entity);
         socket.broadcast.to(socket.room).emit('updateentity', entity);
+    });
+
+    // Spawn an entity
+    socket.on('spawnentity', function(entity) {
+        entities.push(entity);
+        io.sockets.in(socket.room).emit('spawnentity', entity, entities.length-1);
+    });
+
+    // Remove an entity
+    socket.on('removeentity', function(name) {
+        entities.remove(name);
+        io.sockets.in(socket.room).emit('removeentity', name);
     });
 
     // Send chat message
@@ -65,7 +77,8 @@ io.sockets.on('connection', function(socket) {
 
     // Remove player from the game
     socket.on('disconnect', function() {
-        disconnect(socket);
+        clearTimeout(heartbeat);
+        disconnect(socket, ' warped out.');
     });
 
 });

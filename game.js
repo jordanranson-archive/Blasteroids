@@ -62,34 +62,10 @@ Game = function() {
     this.initSocket = function() {
         var self = this;
 
-        /*var player = {
-            name: prompt("What's your name?", 'Anonymous'+((new Date()).getTime()>>4).toString(16)),
-            type: 'player',
-            pos: {x: 0, y: 0},
-            last: {x: 0, y: 0},
-            vel: {x: 0, y: 0},
-            speed: 0.25, // divide by 100 - meters per second
-            angle: 0,
-            radius: 48,
-            alive: true,
-            shapes: [
-                {
-                    points: [
-                        {x: 0, y: 0}
-                    ],
-                    color: '#fff'
-                }
-            ]
-        };
-        this.playername = player.name;
-        socket.emit('join', player);
-        $('.chat input').removeAttr('disabled');
-        */
-
         socket.on('joined', function() {
             setInterval(function() {
                 socket.emit('ping');
-            }, 5);
+            }, 5000);
         });
 
         socket.on('updateentities', function (entities) {
@@ -98,6 +74,14 @@ Game = function() {
 
         socket.on('updateentity', function (entity) {
             self.entities.update(entity.name, entity);
+        });
+
+        socket.on('spawnentity', function (entity, index) {
+            self.entities.splice(index, 0, entity);
+        });
+
+        socket.on('removeentity', function (name) {
+            self.entities.remove(name);
         });
 
         socket.on('removeplayer', function (playername) {
@@ -168,13 +152,22 @@ Game = function() {
     };
 
     this.update = function() {
+
+        // update entities
         for(var i = 0; i < this.entities.length; i++) {
+            if( !this.entities[i].alive ) {
+                socket.emit('removeentity', this.entities[i].name);
+            }
+
             if( this.entities[i].type === 'player' ) Player.update( this.entities[i] );
+            if( this.entities[i].type === 'projectile' ) Projectile.update( this.entities[i] );
         }
 
         this.canvas.width = this.canvas.width;
         var $tag;
         for(var i = 0; i < this.entities.length; i++) {
+
+            // draw player
             if( this.entities[i].type === 'player' ) {
                 Player.draw( this.entities[i] );
 
@@ -192,6 +185,11 @@ Game = function() {
                     .css('left', ((this.entities[i].pos.x<<0) + this.entities[i].radius - ($tag.width()*.5)) + 'px');
                 }
             }
+
+            // draw projectile
+            if( this.entities[i].type === 'projectile' ) {
+                Projectile.draw( this.entities[i] );
+            }
         }
         
         this.shipBuilder.update();
@@ -208,6 +206,16 @@ Game = function() {
         $('#tabPanel canvas')
         .attr('width', $elem.width())
         .attr('height', $elem.height());
+    };
+
+    this.spawnEntity = function(entity) {
+        /*if(settings) $.extend(entity, settings);
+        entity.pos.x = x;
+        entity.pos.y = y;*/
+
+        socket.emit('spawnentity', entity);
+
+        return entity;
     };
 
     this.init();
