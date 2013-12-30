@@ -18,37 +18,12 @@ Game = function() {
     this.shipBuilder = new ShipBuilder();
     this.screen = {x: 0, y: 0};
     this.playername = 'anonymous';
+    this.universe = {};
 
     this._scalar = 10;
 
     this.entities = [];
     this.entityCanvas = {};
-
-    /*
-
-    {   
-        name: 'anonymous',
-        type: 'player',
-        pos: {x: 0, y: 0},
-        last: {x: 0, y: 0},
-        vel: {x: 0, y: 0},
-        speed: 0,
-        angle: 0,
-        radius: 0,
-        alive: true,
-        shapes: [
-            {
-                points: [
-                    {x: 0, y: 0}
-                ],
-                color: '#fff'
-            }
-        ],
-        reactorPos: 0,
-        reactorColor: '#fff'
-    }
-
-    */
 
     this.init = function() {
         this.initSocket();
@@ -61,6 +36,11 @@ Game = function() {
 
     this.initSocket = function() {
         var self = this;
+
+        socket.on('aboutuniverse', function(universe) {
+            self.universe = universe;
+            self.shipBuilder.open();
+        });
 
         socket.on('joined', function() {
             setInterval(function() {
@@ -143,7 +123,6 @@ Game = function() {
         })();
 
         this.resize();
-        self.shipBuilder.open();
 
         (function animloop(){
             requestAnimFrame(animloop);
@@ -163,7 +142,30 @@ Game = function() {
             if( this.entities[i].type === 'projectile' ) Projectile.update( this.entities[i] );
         }
 
+        // draw
         this.canvas.width = this.canvas.width;
+
+        // draw universe info
+
+        if( this.universe.size ) {
+
+            // grid
+            this.context.fillStyle = '#222222';
+            var w = (this.universe.size / (game._scalar*5)) << 0;
+            for(var x = 0; x < w; x++) {
+                for(var y = 0; y < w; y++) {
+                    this.context.fillRect(x*(game._scalar*5), y*(game._scalar*5), 1, 1);
+                }
+            }
+
+            // border
+            this.context.strokeStyle = '#555';
+            this.context.lineWidth = 4;
+            this.context.rect(0,0,this.universe.size,this.universe.size);
+            this.context.stroke();
+        }
+
+        // draw entities
         var $tag;
         for(var i = 0; i < this.entities.length; i++) {
 

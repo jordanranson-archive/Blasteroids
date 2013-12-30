@@ -2,6 +2,9 @@ var io = require('socket.io').listen(3000, { log: false });
 require('./util.js');
 
 var entities = [];
+var universe = {
+    size: 10000
+};
 
 function disconnect(socket, message) {
         // Goodbye message
@@ -16,12 +19,15 @@ function disconnect(socket, message) {
 
 io.sockets.on('connection', function(socket) {
 
-    var heartbeat;
-
     /* Cheat Sheet */
     // io.sockets.in(socket.room).emit()        <== all clients
     // socket.broadcast.to(socket.room).emit()  <== all clients but sender
     // socket.emit()                            <== only sender
+
+    var heartbeat;
+
+    // send info about server to client
+    socket.emit('aboutuniverse', universe);
 
     // Join the main room
     socket.on('join', function(player) {
