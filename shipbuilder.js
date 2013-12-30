@@ -206,7 +206,7 @@ ShipBuilder = function() {
         var player = {   
             name: $('#name').val(),
             type: 'player',
-            pos: {x: 0, y: 0},
+            pos: {x: game.universe.size*.5, y: game.universe.size*.5},
             last: {x: 0, y: 0},
             vel: {x: 0, y: 0},
             speed: this.player.speed,

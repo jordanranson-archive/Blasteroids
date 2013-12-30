@@ -11,6 +11,11 @@ Player.update = function(entity) {
     // handle input
     if( entity.name === game.playername ) {
 
+
+        // update camera position
+        game.camera.x += (entity.pos.x+entity.radius - game.camera.x) / 33;
+        game.camera.y += (entity.pos.y+entity.radius - game.camera.y) / 33;
+
         // movement
         if( game.input.state(Key.w) ) {
             entity.vel.x += Math.cos(Math.radians(entity.angle))*entity.speed;

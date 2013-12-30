@@ -15,10 +15,11 @@ Game = function() {
     this.canvas = $('#canvas')[0];
     this.context = this.canvas.getContext('2d');
     this.input = null;
-    this.shipBuilder = new ShipBuilder();
-    this.screen = {x: 0, y: 0};
+    this.shipBuilder = null;
     this.playername = 'anonymous';
     this.universe = {};
+
+    this.camera = {x: 0, y: 0};
 
     this._scalar = 10;
 
@@ -39,13 +40,17 @@ Game = function() {
 
         socket.on('aboutuniverse', function(universe) {
             self.universe = universe;
+            self.camera.x = universe.size*.5;
+            self.camera.y = universe.size*.5;
+
+            self.shipBuilder = new ShipBuilder();
             self.shipBuilder.open();
         });
 
         socket.on('joined', function() {
             setInterval(function() {
-                socket.emit('ping');
-            }, 5000);
+                socket.emit('ping', self.playername);
+            }, 7500);
         });
 
         socket.on('updateentities', function (entities) {
@@ -132,6 +137,7 @@ Game = function() {
 
     this.update = function() {
 
+
         // update entities
         for(var i = 0; i < this.entities.length; i++) {
             if( !this.entities[i].alive ) {
@@ -142,15 +148,19 @@ Game = function() {
             if( this.entities[i].type === 'projectile' ) Projectile.update( this.entities[i] );
         }
 
+
         // draw
         this.canvas.width = this.canvas.width;
 
-        // draw universe info
+        var offsetx = -game.camera.x + ($(window).width()*.5),
+            offsety = -game.camera.y + ($(window).height()*.5);
+        game.context.translate( offsetx, offsety );
 
+        // draw universe info
         if( this.universe.size ) {
 
             // grid
-            this.context.fillStyle = '#222222';
+            this.context.fillStyle = '#333';
             var w = (this.universe.size / (game._scalar*5)) << 0;
             for(var x = 0; x < w; x++) {
                 for(var y = 0; y < w; y++) {
@@ -165,9 +175,15 @@ Game = function() {
             this.context.stroke();
         }
 
+
         // draw entities
         var $tag;
         for(var i = 0; i < this.entities.length; i++) {
+
+            var h = this.entities[i].pos.y<<0;
+                h += offsety;
+            var w = (this.entities[i].pos.x<<0) + this.entities[i].radius;
+                w += offsetx;
 
             // draw player
             if( this.entities[i].type === 'player' ) {
@@ -183,8 +199,8 @@ Game = function() {
                     .appendTo('body');
                 } else {
                     $tag
-                    .css('top', this.entities[i].pos.y<<0 + 'px')
-                    .css('left', ((this.entities[i].pos.x<<0) + this.entities[i].radius - ($tag.width()*.5)) + 'px');
+                    .css('top', h + 'px')
+                    .css('left', (w - ($tag.width()*.5)) + 'px');
                 }
             }
 
@@ -194,8 +210,12 @@ Game = function() {
             }
         }
         
-        this.shipBuilder.update();
-        this.shipBuilder.draw();
+
+        // ship builder update and draw
+        if( this.shipBuilder ) {
+            this.shipBuilder.update();
+            this.shipBuilder.draw();
+        }
     };
 
     this.resize = function() {

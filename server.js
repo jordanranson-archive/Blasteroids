@@ -43,7 +43,7 @@ io.sockets.on('connection', function(socket) {
 
         // Announce to players
         socket.emit('joined');
-        socket.emit('updatechat', 'SERVER', 'Welcome to deep space, ' + socket.playername);
+        socket.emit('updatechat', 'SERVER', 'Welcome to deep space, ' + socket.playername + '.');
         socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.playername + ' warped in.');
 
         heartbeat = setTimeout(function() {
@@ -51,11 +51,13 @@ io.sockets.on('connection', function(socket) {
         }, 30000);
     });
 
-    socket.on('ping', function() {
-        clearTimeout(heartbeat);
-        heartbeat = setTimeout(function() {
-            disconnect(socket, ' timed out.');
-        }, 30000);
+    socket.on('ping', function(name) {
+        if( socket.playername === name ) {
+            clearTimeout(heartbeat);
+            heartbeat = setTimeout(function() {
+                disconnect(socket, ' timed out.');
+            }, 30000);
+        }
     });
 
     // Update an entity
