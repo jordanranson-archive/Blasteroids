@@ -23,7 +23,7 @@ Projectile.update = function(entity) {
     entity.vel.y *= .995;
 
     // send to server
-    if( entity.pos.x<<0 !== entity.last.x<<0 || entity.pos.y<<0 !== entity.last.y<<0 ) {
+    if( entity.owner === game.playername && (entity.pos.x<<0 !== entity.last.x<<0 || entity.pos.y<<0 !== entity.last.y<<0) ) {
         socket.emit('updateentity', entity);
     }
 

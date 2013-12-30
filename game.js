@@ -208,6 +208,11 @@ Game = function() {
             if( this.entities[i].type === 'projectile' ) {
                 Projectile.draw( this.entities[i] );
             }
+
+            // draw asteroids
+            if( this.entities[i].type === 'asteroid' ) {
+                Asteroid.draw( this.entities[i] );
+            }
         }
         
 
