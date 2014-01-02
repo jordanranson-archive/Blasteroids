@@ -1,0 +1,21 @@
+{
+  "name": "Blasteroids",
+  "version": "0.0.0",
+  "description": "ERROR: No README.md file found!",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordanranson/Blasteroids.git"
+  },
+  "author": "Jordan Ranson",
+  "license": "BSD",
+  "gitHead": "e10cd13288e841579ce02ccb195887bd263d0e29",
+  "devDependencies": {
+    "socket.io": "~0.9.16",
+    "colors": "~0.6.2"
+  }
+}

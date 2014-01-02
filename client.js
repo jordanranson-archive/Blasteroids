@@ -29,10 +29,10 @@ window.onload = function() {
             return;
         }
 
-        log('loading...', queuedScripts[index]+'.js');
+        log('loading...', queuedScripts[index]);
 
         // Adding the script tag to the head as suggested before
-        var url = queuedScripts[index] + '.js';
+        var url = queuedScripts[index];
         var head = document.getElementsByTagName('head')[0];
         var script = document.createElement('script');
         script.type = 'text/javascript';
@@ -58,24 +58,25 @@ window.onload = function() {
      */
 
     // Third party
-    require('client/vendor/zepto');
+    require('client/vendor/zepto.js');
+    require('client/vendor/socket.io.js');
 
     // Constants
-    require('lib/constants');
-    require('lib/key');
+    require('lib/constants.js');
+    require('lib/key.js');
 
     // Core
-    require('lib/util');
-    require('lib/class');
-    require('client/draw');
-    require('client/input');
-    require('client/camera');
-    require('client/game');
+    require('lib/util.js');
+    require('lib/class.js');
+    require('client/draw.js');
+    require('client/input.js');
+    require('client/camera.js');
+    require('client/game.js');
 
     // Objects
-    require('lib/entity');
-    require('lib/entities/player');
-    require('client/entities/player');
+    require('lib/entity.js');
+    require('lib/entities/player.js');
+    require('client/entities/player.js');
 
 
     // Start the game

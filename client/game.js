@@ -1,5 +1,6 @@
 global.Game = global.Class.extend({
     
+    socket: null,
     input: null,
     draw: null,
     camera: null,
@@ -16,6 +17,16 @@ global.Game = global.Class.extend({
         this.camera = new global.Camera();
 
         this.spawnEntity( 'PlayerClient', 0, 0, 0, {} );
+    },
+
+    bindSockets: function() {
+        this.socket = io.connect( 
+            global.Constants.SERVER_URL + ':' + 
+            global.Constants.SERVER_PORT );
+
+        var packet = {};
+        this.socket.emit( 'join', packet );
+        this.socket.on( 'join', function( data ) { this.join( data ) } );
     },
 
     update: function( time ) {
