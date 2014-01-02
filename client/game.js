@@ -109,6 +109,7 @@ global.Game = global.Class.extend({
 
     removeEntity: function( packet ) {
         console.log( 'removed:', packet.data.id );
+        this.entities.remove( packet.data.id );
     },
 
     join: function( packet ) {

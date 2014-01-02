@@ -65,6 +65,8 @@ global.Server = global.Class.extend({
     update: function() {
         var time = Date.now();
 
+        // do update code here
+
         var d = new Date(time);
         global.debug( 'updated @', d.getHours()+':'+d.getMinutes()+':'+d.getSeconds() );
     },
@@ -107,7 +109,8 @@ global.Server = global.Class.extend({
         socket.join('space');
 
         // Create player and add to game
-        var pos = this.universe.size*.5;
+        //var pos = this.universe.size*.5;
+        var pos = 100;
         var player = new global.Player( this.index, { 
             pos: { x: pos, y: pos }, 
             name: name,
