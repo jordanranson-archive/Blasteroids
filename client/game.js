@@ -13,7 +13,7 @@ global.Game = global.Class.extend({
 
     init: function() {
         this.input = new global.Input();
-        this.draw = new global.Draw('#canvas');
+        this.draw = new global.Draw( '#canvas' , global.Constants.CLEAR_COLOR );
         this.camera = new global.Camera();
 
         this.bindSockets();
@@ -64,6 +64,7 @@ global.Game = global.Class.extend({
         }
 
         // Draw
+        this.draw.clear();
         i = this.entities.length;
         while( i-- ) {
             this.entities[i].draw( this.draw );
@@ -93,6 +94,7 @@ global.Game = global.Class.extend({
 
         var i = entities.length;
         while( i-- ) {
+            console.log( 'spawned:', packet );
             this.spawnEntity( entities[i].clientClassName, entities[i] );
         };
     },
@@ -103,12 +105,11 @@ global.Game = global.Class.extend({
         var entity = new global[className]( settings.id, settings );
         this.entities.push( entity );
 
-        console.log( 'spawned:', entity );
         return entity;
     },
 
     removeEntity: function( packet ) {
-        console.log( 'removed:', packet.data.id );
+        console.log( 'removed:', packet );
         this.entities.remove( packet.data.id );
     },
 
