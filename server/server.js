@@ -114,7 +114,9 @@ global.Server = global.Class.extend({
         var player = new global.Player( this.index, { 
             pos: { x: pos, y: pos }, 
             name: name,
-            lastUpdate: Date.now()
+            lastUpdate: Date.now(),
+            angle: 30,
+            vel: { x: 5, y: 5 }
         });
         this.index++; // increment global entity index
         this.players.push( name );
