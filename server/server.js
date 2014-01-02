@@ -13,7 +13,7 @@ global.debug = function() {
     for( var i = 0; i < arguments.length; i++ ) {
         msg += arguments[i] + ' ';
     }
-    console.log( '   host  -'.grey, msg );
+    console.log( '   debug -'.grey, msg );
 }
 
 global.Server = global.Class.extend({
@@ -82,11 +82,21 @@ global.Server = global.Class.extend({
     join: function( socket, packet ) {
         var time = packet.time;
         var name = packet.data.name;
+        var packet;
+
+        // Check to see if name is valid
+        if( name === null || name.length === 0 ) {
+            packet = global.Packet.create({ msg: 'Invalid player name.' });
+            socket.emit( 'server:invalid_name', packet );
+
+            return;
+        }
 
         // Check to see if player name exists
         if( this.players.indexOf( name ) !== -1 ) {
             global.log( 'duplicate player name'.red );
-            socket.emit( 'server:duplicate_name' );
+            packet = global.Packet.create({ msg: 'That name is already in use.' });
+            socket.emit( 'server:invalid_name', packet );
 
             return;
         }
@@ -98,41 +108,51 @@ global.Server = global.Class.extend({
 
         // Create player and add to game
         var pos = this.universe.size*.5;
-        var player = new global.Player( this.index, { pos: { x: pos, y: pos }, name: name } );
+        var player = new global.Player( this.index, { 
+            pos: { x: pos, y: pos }, 
+            name: name,
+            lastUpdate: Date.now()
+        });
         this.index++; // increment global entity index
         this.players.push( name );
         this.entities.push( player );
 
         // Notify client of successful join
-        var packet = global.Packet.create({
-            name: name
-        });
+        packet = global.Packet.create({ name: name });
         socket.emit( 'server:join', packet );
 
-        // Notify clients of new player
-        packet = global.Packet.create({
-            entities: [player.serialize()]
-        });
-        this.io.sockets.in( socket.room ).emit( 'server:spawn_entities', packet );
+        // Notify player of all entities
+        var entities = [], len = this.entities.length;
+        while( len-- ) entities.push( this.entities[len].serialize() );
+        packet = global.Packet.create({ entities: entities });
+        socket.emit( 'server:spawn_entities', packet );
+
+        // Notify all other clients of new player
+        packet = global.Packet.create({ entities: [player.serialize()] });
+        socket.broadcast.to( socket.room ).emit( 'server:spawn_entities', packet );
 
         global.log( 'player', name.yellow, 'joined' );
     },
 
     disconnect: function( socket, message ) { 
 
-        // Leave room
-        socket.leave( socket.room );
+        // Check if a player has been spawned for the disconnecting client
+        var player = this.entities.find( 'name', socket.playername );
+        if( player !== -1 ) {
 
-        // Remove player from server
-        var player = this.players.find( 'name', socket.playername );
-        this.entities.remove( player.id );
-        this.players.slice( this.players.indexOf( player ), 1 );
+            // Leave room
+            socket.leave( socket.room );
 
-        // Notify clients of removed entity
-        var packet = global.Packet.create({
-            name: socket.playername
-        });
-        this.io.sockets.in( socket.room ).emit( 'server:remove_entity', packet );
+            // Remove player from server
+            this.entities.remove( player.id );
+            this.players.splice( this.players.indexOf( player ), 1 );
+
+            // Notify clients of removed entity
+            var packet = global.Packet.create({
+                id: player.id
+            });
+            this.io.sockets.in( socket.room ).emit( 'server:remove_entity', packet );
+        }
 
         global.log( 'client disconnected:'.red, message );
     }

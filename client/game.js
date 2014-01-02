@@ -26,24 +26,29 @@ global.Game = global.Class.extend({
             global.Constants.SERVER_URL + ':' + 
             global.Constants.SERVER_PORT );
 
-        // Player join
+        // Request to join the game
         var packet = global.Packet.create({
             name: prompt( 
                 "What's your name?", 
                 'anon'+((new Date()).getTime()>>4).toString(16) )
         });
-        this.socket.emit(   'game:join', 
-            packet );
+        this.socket.emit(   'game:join', packet );
+
+        // Server accepted player join request
         this.socket.on(     'server:join', 
             function( data ) { self.join( data ) });
 
         // Duplicate name detected
-        this.socket.on(     'server:duplicate_name', 
-            function() { self.duplicateName() });
+        this.socket.on(     'server:invalid_name', 
+            function( data ) { self.invalidName( data ) });
 
         // Server spawned an entity
         this.socket.on(     'server:spawn_entities', 
-            function( packet ) { self.spawnEntities( packet ); });
+            function( data ) { self.spawnEntities( data ); });
+
+        // Server removed an entity
+        this.socket.on(     'server:remove_entity', 
+            function( data ) { self.removeEntity( data ); });
     },
 
     update: function( time ) {
@@ -102,15 +107,19 @@ global.Game = global.Class.extend({
         return entity;
     },
 
+    removeEntity: function( packet ) {
+        console.log( 'removed:', packet.data.id );
+    },
+
     join: function( packet ) {
         console.log( 'joined:', packet );
         this.playerName = packet.data.name;
     },
 
-    duplicateName: function() {
+    invalidName: function( packet ) {
         var packet = global.Packet.create({
             name: prompt( 
-                "Name already in use. Please choose a different name:", 
+                packet.data.msg + ' Please choose a different name:', 
                 'anon'+((new Date()).getTime()>>4).toString(16) )
         });
         this.socket.emit( 'game:join', packet );
