@@ -17,25 +17,33 @@ global.Game = global.Class.extend({
         this.camera = new global.Camera();
 
         this.bindSockets();
-
-        this.spawnEntity( 'PlayerClient', 0, 0, 0, {} );
     },
 
     bindSockets: function() {
-        var _g = global;
-        
+        var self = this;
+
         this.socket = io.connect( 
             global.Constants.SERVER_URL + ':' + 
             global.Constants.SERVER_PORT );
 
         // Player join
-        var packet = _g.Packet.create({
+        var packet = global.Packet.create({
             name: prompt( 
                 "What's your name?", 
                 'anon'+((new Date()).getTime()>>4).toString(16) )
         });
-        this.socket.emit( 'join', packet );
-        this.socket.on( 'join', function( data ) { this.join( data ) } );
+        this.socket.emit(   'game:join', 
+            packet );
+        this.socket.on(     'server:join', 
+            function( data ) { self.join( data ) });
+
+        // Duplicate name detected
+        this.socket.on(     'server:duplicate_name', 
+            function() { self.duplicateName() });
+
+        // Server spawned an entity
+        this.socket.on(     'server:spawn_entities', 
+            function( packet ) { self.spawnEntities( packet ); });
     },
 
     update: function( time ) {
@@ -75,14 +83,37 @@ global.Game = global.Class.extend({
         })();
     },
 
-    spawnEntity: function( className, id, x, y, settings ) {
+    spawnEntities: function( packet ) {
+        var entities = packet.data.entities;
+
+        var i = entities.length;
+        while( i-- ) {
+            this.spawnEntity( entities[i].clientClassName, entities[i] );
+        };
+    },
+
+    spawnEntity: function( className, settings ) {
         if( settings === undefined ) settings = {};
 
-        var entity = new global[className]( id, x, y, settings );
+        var entity = new global[className]( settings.id, settings );
         this.entities.push( entity );
 
         console.log( 'spawned:', entity );
         return entity;
+    },
+
+    join: function( packet ) {
+        console.log( 'joined:', packet );
+        this.playerName = packet.data.name;
+    },
+
+    duplicateName: function() {
+        var packet = global.Packet.create({
+            name: prompt( 
+                "Name already in use. Please choose a different name:", 
+                'anon'+((new Date()).getTime()>>4).toString(16) )
+        });
+        this.socket.emit( 'game:join', packet );
     }
 
 });

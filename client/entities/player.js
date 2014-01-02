@@ -1,9 +1,10 @@
 global.PlayerClient = global.Player.extend({
     
     className: 'PlayerClient',
+    clientClassName: 'PlayerClient',
 
-    init: function( id, x, y, settings ) {
-        this._super( id, x, y, settings );
+    init: function( id, settings ) {
+        this._super( id, settings );
     },
 
     draw: function( draw ) {
