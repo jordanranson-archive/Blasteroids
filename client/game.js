@@ -14,6 +14,8 @@ global.Game = global.Class.extend({
         this.input = new global.Input();
         this.draw = new global.Draw('#canvas');
         this.camera = new global.Camera();
+
+        this.spawnEntity( 'PlayerClient', 0, 0, 0, {} );
     },
 
     update: function( time ) {
@@ -21,18 +23,16 @@ global.Game = global.Class.extend({
         // Update input handler
         this.input.update();
 
-        // Handle input
-        for( var i = this.entities.length-1; i >= 0; i-- ) {
-            this.entities[i].update( time, this.input );
-        }
-
         // Update
-        for( var i = this.entities.length-1; i >= 0; i-- ) {
+        var i = this.entities.length;
+        while( i-- ) {
+            this.entities[i].handleInput( time, this.input ); 
             this.entities[i].update( time );
         }
 
         // Draw
-        for( var i = this.entities.length-1; i >= 0; i-- ) {
+        i = this.entities.length;
+        while( i-- ) {
             this.entities[i].draw( this.draw );
         }
     },
@@ -53,6 +53,16 @@ global.Game = global.Class.extend({
             requestAnimFrame(animloop);
             self.update( Date.now() );
         })();
+    },
+
+    spawnEntity: function( className, id, x, y, settings ) {
+        if( settings === undefined ) settings = {};
+
+        var entity = new global[className]( id, x, y, settings );
+        this.entities.push( entity );
+
+        console.log( 'spawned:', entity );
+        return entity;
     }
 
 });

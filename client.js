@@ -74,6 +74,8 @@ window.onload = function() {
 
     // Objects
     require('lib/entity');
+    require('lib/entities/player');
+    require('client/entities/player');
 
 
     // Start the game
