@@ -93,9 +93,11 @@ global.Game = global.Class.extend({
         var entities = packet.data.entities;
 
         var i = entities.length;
+        var entity;
         while( i-- ) {
             console.log( 'spawned:', packet );
-            this.spawnEntity( entities[i].clientClassName, entities[i] );
+            entity = this.spawnEntity( entities[i].clientClassName, entities[i] );
+            entity.bindSockets( this.socket );
         };
     },
 

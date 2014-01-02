@@ -28,6 +28,7 @@ global.PlayerClient = global.Player.extend({
 
         draw.finish( context );
 
+        console.log( canvas.toDataURL() );
         return canvas;
     },
 
@@ -39,7 +40,14 @@ global.PlayerClient = global.Player.extend({
         }
 
         var context = draw.context;
-        draw.begin( context, this.pos.x, this.pos.y, this.canvas.width, this.canvas.height, this.angle );
+        draw.begin( 
+            context, 
+            this.pos.x-(this.size.x*.5), 
+            this.pos.y-(this.size.y*.5), 
+            this.canvas.width, 
+            this.canvas.height, 
+            this.angle
+        );
 
         // Draw the ship
         draw.image( context, this.canvas, 0, 0 );

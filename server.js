@@ -15,5 +15,5 @@ require('./server/server.js');
 require('./lib/entity.js');
 require('./lib/entities/player.js');
 
-var server = new global.Server( global.Constants.SERVER_PORT );
+var server = new global.Server();
 server.run();

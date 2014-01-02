@@ -42,7 +42,7 @@ global.Draw = global.Class.extend({
 
         context.translate( x, y );
         context.translate( w*.5, h*.5 );
-        if( angle ) context.rotate( Math.radians( angle+90 ) );
+        context.rotate( Math.radians( angle ? angle : 0 ) );
 
         context.globalAlpha = 1;
         context.globalCompositeOperation = 'source-over';
@@ -85,8 +85,8 @@ global.Draw = global.Class.extend({
     image: function( context, canvas, x, y ) {
         context.drawImage( 
             canvas, 
-            x - canvas.width, 
-            y - canvas.height
+            x - canvas.width*.5, 
+            y - canvas.height*.5
         );
     },
 

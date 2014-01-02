@@ -19,19 +19,18 @@ global.debug = function() {
 global.Server = global.Class.extend({
 
     io: null,
-    socketPort: 3000,
-    updateInterval: 5000,
+    socketPort: global.Constants.SERVER_PORT,
+    updateInterval: global.Constants.UPDATE_INTERVAL,
 
     index: 0,
     entities: [],
     players: [],
 
     universe: {
-        size: 10000
+        size: global.Constants.UNIVERSE.SIZE
     },
 
-    init: function( port ) {
-        this.socketPort = port ? port : 3000;
+    init: function() {
         global.log( 'starting server on', this.socketPort );
 
         this.bindSockets();
@@ -108,17 +107,20 @@ global.Server = global.Class.extend({
         socket.room = 'space';
         socket.join('space');
 
-        // Create player and add to game
+        // Create player
         //var pos = this.universe.size*.5;
-        var pos = 100;
+        var pos = 50;
         var player = new global.Player( this.index, {
             pos: { x: pos, y: pos }, 
-            vel: { x: 20, y: 20 },
+            vel: { x: 0, y: 0 },
             name: name,
             lastUpdate: Date.now(),
-            angle: 30
+            angle: 45
         });
+        player.bindSockets( this.socket );
         this.index++; // increment global entity index
+
+        // Add player to game
         this.players.push( name );
         this.entities.push( player );
 
