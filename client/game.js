@@ -1,5 +1,5 @@
 global.Game = global.Class.extend({
-    
+
     socket: null,
     input: null,
     draw: null,
@@ -16,15 +16,24 @@ global.Game = global.Class.extend({
         this.draw = new global.Draw('#canvas');
         this.camera = new global.Camera();
 
+        this.bindSockets();
+
         this.spawnEntity( 'PlayerClient', 0, 0, 0, {} );
     },
 
     bindSockets: function() {
+        var _g = global;
+        
         this.socket = io.connect( 
             global.Constants.SERVER_URL + ':' + 
             global.Constants.SERVER_PORT );
 
-        var packet = {};
+        // Player join
+        var packet = _g.Packet.create({
+            name: prompt( 
+                "What's your name?", 
+                'anon'+((new Date()).getTime()>>4).toString(16) )
+        });
         this.socket.emit( 'join', packet );
         this.socket.on( 'join', function( data ) { this.join( data ) } );
     },

@@ -6,15 +6,14 @@ global.log = function() {
     console.log( '   host  -'.magenta, msg );
 }
 
-global._debug = true;
 global.debug = function() {
-    if( !global._debug ) return;
+    if( !global.Constants.DEBUG ) return;
 
     var msg = '';
     for( var i = 0; i < arguments.length; i++ ) {
         msg += arguments[i] + ' ';
     }
-    console.log( '   debug -'.grey, msg );
+    console.log( '   host  -'.grey, msg );
 }
 
 global.Server = global.Class.extend({
@@ -38,17 +37,23 @@ global.Server = global.Class.extend({
 
     bindSockets: function() {
         global.log( 'binding sockets' );
-        this.io = require('socket.io').listen(this.socketPort, { log: true });
+        this.io = require( 'socket.io' ).listen( this.socketPort, { log: true } );
+        if( !global.Constants.DEBUG ) this.io.set( 'log level', 1 );
 
         // Bind socket events
         var self = this;
-        self.io.sockets.on('connection', function(socket) {
+        self.io.sockets.on( 'connection', function( socket ) {
 
-            console.log( 'client connected' );
+            global.log( 'client connected'.green );
+
+            // Player wants to join the game
+            socket.on( 'join', function( packet ) {
+                self.join( packet );
+            });
 
             // Remove player from the game
-            socket.on('disconnect', function() {
-                this.disconnect( 'null' );
+            socket.on( 'disconnect', function() {
+                self.disconnect( 'disconnected' );
             });
 
         });
@@ -72,12 +77,15 @@ global.Server = global.Class.extend({
         })();
     },
 
-    join: function() {
-        
+    join: function( packet ) {
+        var time = packet.time;
+        var name = packet.data.name;
+
+        global.log( 'player', name.yellow, 'joined' );
     },
 
     disconnect: function( message ) {
-        global.log( 'client disconnected:', message );
+        global.log( 'client disconnected:'.red, message );
     }
 
 });

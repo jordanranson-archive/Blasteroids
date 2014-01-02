@@ -68,6 +68,7 @@ window.onload = function() {
     // Core
     require('lib/util.js');
     require('lib/class.js');
+    require('lib/packet.js');
     require('client/draw.js');
     require('client/input.js');
     require('client/camera.js');
