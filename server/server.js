@@ -108,14 +108,13 @@ global.Server = global.Class.extend({
         socket.join('space');
 
         // Create player
-        //var pos = this.universe.size*.5;
-        var pos = 50;
+        var pos = this.universe.size*.5;
         var player = new global.Player( this.index, {
-            pos: { x: pos, y: pos }, 
+            pos: { x: pos, y: pos*.625 }, 
             vel: { x: 0, y: 0 },
             name: name,
             lastUpdate: Date.now(),
-            angle: 45
+            angle: 0
         });
         player.bindSockets( this.socket );
         this.index++; // increment global entity index
