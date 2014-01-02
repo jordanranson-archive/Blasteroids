@@ -111,12 +111,12 @@ global.Server = global.Class.extend({
         // Create player and add to game
         //var pos = this.universe.size*.5;
         var pos = 100;
-        var player = new global.Player( this.index, { 
+        var player = new global.Player( this.index, {
             pos: { x: pos, y: pos }, 
+            vel: { x: 20, y: 20 },
             name: name,
             lastUpdate: Date.now(),
-            angle: 30,
-            vel: { x: 5, y: 5 }
+            angle: 30
         });
         this.index++; // increment global entity index
         this.players.push( name );
