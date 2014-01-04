@@ -7,7 +7,7 @@ global.Input = global.Class.extend({
         var self = this;
 
         $( document ).on( 'keydown', function( e ) { self.keydown( e ) } );
-        $( document ).on( 'keyup', function( e ) { self.keydown( e ) } );
+        $( document ).on( 'keyup', function( e ) { self.keyup( e ) } );
     },
 
     keydown: function( evt ) {

@@ -28,7 +28,6 @@ global.PlayerClient = global.Player.extend({
 
         draw.finish( context );
 
-        console.log( canvas.toDataURL() );
         return canvas;
     },
 
@@ -53,6 +52,10 @@ global.PlayerClient = global.Player.extend({
         draw.image( context, this.canvas, 0, 0 );
 
         draw.finish( context );
+    },
+
+    handleInput: function( input ) {
+        
     }
 
 })

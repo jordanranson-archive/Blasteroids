@@ -53,14 +53,10 @@ global.Game = global.Class.extend({
 
     update: function( time ) {
 
-        // Update input handler
-        this.input.update();
-
         // Update
         var i = this.entities.length;
         while( i-- ) {
-            this.entities[i].handleInput( time, this.input ); 
-            this.entities[i].update( time );
+            this.entities[i].update( time, this.input );
         }
 
         // Draw
@@ -69,6 +65,9 @@ global.Game = global.Class.extend({
         while( i-- ) {
             this.entities[i].draw( this.draw );
         }
+
+        // Update input handler
+        this.input.update();
     },
 
     run: function() {
@@ -97,7 +96,6 @@ global.Game = global.Class.extend({
         while( i-- ) {
             console.log( 'spawned:', packet );
             entity = this.spawnEntity( entities[i].clientClassName, entities[i] );
-            entity.bindSockets( this.socket );
         };
     },
 

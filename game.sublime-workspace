@@ -1,0 +1,313 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"tag",
+				"Tag: Auto-Format Tags on Selection"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 476.0
+	},
+	"console":
+	{
+		"height": 126.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client/game.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/entity.js",
+		"/C/Users/Jordan/AppData/Local/PCGen/PCGen6001/pcgen-release-notes-6001.html",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client/entities/player.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client/draw.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/constants.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/server/server.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/server.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/entities/player.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/shipbuilder.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/player.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/game.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/util.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/server.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/packet.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/server/server.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client/input.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/assets/game.css",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/client/camera.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/input.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/class.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/lib/key.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/shared/class.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/index.html",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/shared/util.js",
+		"/C/Users/Jordan/Documents/GitHub/Blasteroids/_old/util.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/3rd party/chrome extension/popup.html",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/components.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/modal.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/host/views/index.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/asset.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/app.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/wire/panel.content.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/panel.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/story/listitem.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/wire/listitem.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/general.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/story/panel.toolbar.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/wire/panel.toolbar.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/story/panel.content.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/vendor/jquery.sam.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/templates/wire/asset.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/wire/controller.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/wire/views.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/wire/wire.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/events/nx13/js/test.json",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/host/views/layouts/main.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/app.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/less/variables.less",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/story/controller.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/story/views.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/entities/wire.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/host/models/story.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/entities/story.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/app/js/modules/story/story.js",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/host/views/users/signup.hbs",
+		"/C/Users/Jordan/Documents/GitHub/samapp.io/src/web/host/views/users/signin.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/sam.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/modules/wires/browse/browse_controller.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/modules/wires/browse/browse_view.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/index.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/modules/sidebar/list_view.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/modules/wires/wires_module.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/views/components/listview.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/views/components/listitem.hbs",
+		"/Users/jordanranson/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/templates.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/Gruntfile.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/layouts/main.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/wires/asset.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/config/express.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/vendor/jquery.sam.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/jquery.sam.js",
+		"/Library/WebServer/Documents/samdesk.io/ui kit v2/index.html",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/config/config.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/server.js",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/users/signin.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/users/signup.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/404.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/500.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/sidebar.hbs",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/users/signin.jade",
+		"/Users/jordanranson/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Library/WebServer/Documents/samdesk.io/src/web/host/views/index.jade",
+		"/Library/WebServer/Documents/samdesk.io/src/web/app/js/entities/wires.js",
+		"/Library/WebServer/Documents/samdesk.io/ui kit v2/less/general.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit v2/less/asset.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit v2/js/app.js",
+		"/Library/WebServer/Documents/samdesk.io/ui kit v2/less/panel.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/stories.html",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/css/responsive.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/css/site.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/index.html",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/css/ui.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/js/jquery.sam.ui.js",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/js/site.js",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/TODO.md",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/css/modals.less",
+		"/Library/WebServer/Documents/samdesk.io/ui kit/css/variables.less",
+		"/Library/WebServer/Documents/samdesk.io/app/source/js/templates.js",
+		"/Library/WebServer/Documents/samdesk.io/events/ftv/js/app.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"conso",
+			"console",
+			"duplicateName",
+			"duplicate_name",
+			"duplicateName",
+			".red",
+			".green",
+			"client:",
+			"global._debug",
+			"');\n",
+			"input",
+			"input.update",
+			"resize",
+			" = function(",
+			" = function() {",
+			"global",
+			"_super",
+			"init",
+			"tag_list",
+			" title=\"{{name}}\"",
+			"small",
+			".small",
+			"io-small",
+			"&:after",
+			"tag",
+			"@text",
+			"button",
+			"nav-list",
+			"list-content",
+			"list-menu",
+			"shadowLight",
+			"console",
+			"overflow-y",
+			"1px",
+			"@gray",
+			"gray",
+			"tag",
+			"border",
+			"asset",
+			"\")",
+			"script(type=\"text/javascript\", src=\"",
+			"    -    script(type=\"text/javascript\", src=\"",
+			"	",
+			"  ",
+			"full",
+			"90",
+			"ttp://www.placehold.it/64",
+			">\n",
+			"November"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"invalidName",
+			"global.Constants.DEBUG",
+			": function(",
+			": function() {",
+			"parent",
+			"",
+			"small",
+			"@borderWidth",
+			"\"></script>",
+			"<script src=\"",
+			"    ",
+			"ttp://www.placehold.it/48",
+			"Nov"
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 233.0,
+	"status_bar_visible": true
+}
