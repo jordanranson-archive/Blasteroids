@@ -27,6 +27,7 @@ global.Server = global.Class.extend({
     players: [],
 
     universe: {
+        room: global.Constants.UNIVERSE.ROOM,
         size: global.Constants.UNIVERSE.SIZE
     },
 
@@ -50,6 +51,16 @@ global.Server = global.Class.extend({
             // Player wants to join the game
             socket.on( 'game:join', function( packet ) {
                 self.join( socket, packet );
+            });
+
+            // Game wants to spawn an entity
+            socket.on( 'game:spawn_entity', function( packet ) {
+                self.spawnEntity( socket, packet );
+            });
+
+            // Game wants to update an entity
+            socket.on( 'game:update_entity', function( packet ) {
+                self.updateEntity( socket, packet );
             });
 
             // Remove player from the game
@@ -104,8 +115,7 @@ global.Server = global.Class.extend({
 
         // Set socket player name and join main room
         socket.playername = name;
-        socket.room = 'space';
-        socket.join('space');
+        socket.join( this.universe.room );
 
         // Create player
         var pos = this.universe.size*.5;
@@ -116,7 +126,6 @@ global.Server = global.Class.extend({
             lastUpdate: Date.now(),
             angle: 0
         });
-        player.bindSockets( this.socket );
         this.index++; // increment global entity index
 
         // Add player to game
@@ -135,7 +144,7 @@ global.Server = global.Class.extend({
 
         // Notify all other clients of new player
         packet = global.Packet.create({ entities: [player.serialize()] });
-        socket.broadcast.to( socket.room ).emit( 'server:spawn_entities', packet );
+        socket.broadcast.to( this.universe.room ).emit( 'server:spawn_entities', packet );
 
         global.log( 'player', name.yellow, 'joined' );
     },
@@ -147,7 +156,7 @@ global.Server = global.Class.extend({
         if( player !== -1 ) {
 
             // Leave room
-            socket.leave( socket.room );
+            socket.leave( this.universe.room );
 
             // Remove player from server
             this.entities.remove( player.id );
@@ -157,10 +166,33 @@ global.Server = global.Class.extend({
             var packet = global.Packet.create({
                 id: player.id
             });
-            this.io.sockets.in( socket.room ).emit( 'server:remove_entity', packet );
+            this.io.sockets.in( this.universe.room ).emit( 'server:remove_entity', packet );
         }
 
         global.log( 'client disconnected:'.red, message );
-    }
+    },
 
+    spawnEntity: function( socket, packet ) {
+        var data = packet.data.entity;
+        data.lastUpdate = packet.time;
+
+        var entity = new global[data.className]( this.index, data );
+        this.index++; // increment global entity index
+        this.entities.push( entity );
+
+        packet = global.Packet.create({ entities: [player.serialize()] });
+        socket.broadcast.to( this.universe.room ).emit( 'server:spawn_entities', packet );
+    },
+
+    updateEntity: function( socket, packet ) {
+        var data = packet.data.entity;chr
+
+        // Find entity to update and update it
+        var index = this.entities.indexAt( 'id', data.id );
+        this.entities[index].updateEntity( data );
+
+        // Make clients aware of the update
+        packet = global.Packet.create({ entities: [this.entities[index].serialize()] });
+        socket.broadcast.to( this.universe.room ).emit( 'server:update_entities', packet );
+    }
 });
