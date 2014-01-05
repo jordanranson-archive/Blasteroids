@@ -128,7 +128,7 @@ global.Server = global.Class.extend({
         socket.join( this.universe.room );
 
         // Create player
-        var pos = this.universe.size*.5;
+        var pos = this.universe.size*.5 + (Math.random()*100);
         var player = new global.Player( this.index, {
             pos: { x: pos, y: pos*.625 }, 
             vel: { x: 0, y: 0 },
@@ -137,6 +137,9 @@ global.Server = global.Class.extend({
             angle: 0
         });
         this.index++; // increment global entity index
+
+        player.shapes[1].color = String.randomColor(0);
+        player.shapes[2].color = String.randomColor(64);
 
         // Add player to game
         this.players.push( name );
