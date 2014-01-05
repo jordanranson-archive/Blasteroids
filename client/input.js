@@ -2,6 +2,8 @@ global.Input = global.Class.extend({
 
     keys: [],
     prev: 0,
+
+    bindings: {},
     
     init: function() {
         var self = this;
@@ -23,14 +25,20 @@ global.Input = global.Class.extend({
     },
 
     pressed: function( key ) {
-        var result = this.keys[key] === -1;
-        this.keys[key] = 1;
+        if( this.bindings[key] !== undefined ) {
+            var result = this.keys[this.bindings[key]] === -1;
+            this.keys[this.bindings[key]] = 1;
 
-        return result;
+            return result;
+        }
+
+        return false;
     },
 
     state: function( key ) {
-        return this.keys[key] !== undefined;
+        var result = (this.bindings[key] !== undefined) && (this.keys[this.bindings[key]] !== undefined);
+        
+        return result;
     },
 
     update: function() {
@@ -39,6 +47,12 @@ global.Input = global.Class.extend({
                 this.keys[i] = 1;
             }
         }
+    },
+
+    bind: function( action, key ) {
+        this.bindings[action] = key;
+
+        console.log( action, key );
     }
 
 });

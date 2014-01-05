@@ -13,6 +13,15 @@ global.Game = global.Class.extend({
 
     init: function() {
         this.input = new global.Input();
+
+        this.input.bind( 'forward', global.Key.w );
+        this.input.bind( 'backward', global.Key.s );
+        this.input.bind( 'turnLeft', global.Key.a );
+        this.input.bind( 'turnRight', global.Key.d );
+        this.input.bind( 'shoot', global.Key.space );
+        this.input.bind( 'ability', global.Key.shift );
+        this.input.bind( 'switchAbility', global.Key.q );
+
         this.draw = new global.Draw( '#canvas' , global.Constants.CLEAR_COLOR );
         this.camera = new global.Camera();
 
