@@ -51,8 +51,6 @@ global.Input = global.Class.extend({
 
     bind: function( action, key ) {
         this.bindings[action] = key;
-
-        console.log( action, key );
     }
 
 });

@@ -58,7 +58,7 @@ global.PlayerClient = global.Player.extend({
             this.pos.y-(this.size.y*.5), 
             this.canvas.width, 
             this.canvas.height, 
-            this.angle
+            this.angle+90
         );
 
         // Draw the ship
@@ -67,16 +67,23 @@ global.PlayerClient = global.Player.extend({
         draw.finish( context );
     },
 
-    handleInput: function( input ) {
+    handleInput: function( input, socket ) {
+
+        var changed = false;
 
         var i = this.stateEvents.length;
         while( i-- ) {
-            this.inputState[this.stateEvents[i]] = input.state( this.stateEvents[i] );
+            this.inputState[this.stateEvents[i]] = input.state( this.stateEvents[i] ) ? changed = true : false;
         }
 
         i = this.pressedEvents.length;
         while( i-- ) {
-            this.inputState[this.pressedEvents[i]] = input.pressed( this.pressedEvents[i] );
+            this.inputState[this.pressedEvents[i]] = input.pressed( this.pressedEvents[i] ) ? changed = true : false;
+        }
+
+        if( changed ) {
+            var packet = global.Packet.create({ entity: this.serialize() });
+            socket.emit( 'game:update_entity', packet );
         }
 
     }

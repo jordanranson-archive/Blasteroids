@@ -69,7 +69,7 @@ global.Game = global.Class.extend({
         // Update
         var i = this.entities.length;
         while( i-- ) {
-            this.entities[i].update( time, this.input );
+            this.entities[i].update( time, this.input, this.socket );
         }
 
         // Draw
@@ -127,7 +127,7 @@ global.Game = global.Class.extend({
     },
 
     updateEntities: function( packet ) {
-        console.log( 'updated:', packet );
+        console.log( 'updated' );
         var data = packet.data.entities;
 
         // Update all entities
