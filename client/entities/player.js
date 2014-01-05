@@ -86,7 +86,7 @@ global.PlayerClient = global.Player.extend({
 
             if( this.inputChanged ) {
                 var packet = global.Packet.create({ entity: this.serialize() });
-                //socket.emit( 'game:update_entity', packet );
+                socket.emit( 'game:update_entity', packet );
             }
         }
 
