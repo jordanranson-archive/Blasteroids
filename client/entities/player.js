@@ -5,6 +5,19 @@ global.PlayerClient = global.Player.extend({
 
     canvas: null,
 
+    stateEvents: [
+        'forward', 
+        'backward', 
+        'turnLeft', 
+        'turnRight'
+    ],
+
+    pressedEvents: [
+        'shoot',
+        'ability',
+        'switchAbility'
+    ],
+
     init: function( id, settings ) {
         this._super( id, settings );
     },
@@ -55,40 +68,15 @@ global.PlayerClient = global.Player.extend({
     },
 
     handleInput: function( input ) {
-        
-        // Move forward
-        if( input.state( 'forward' ) ) {
-            console.log( 'forward' );
+
+        var i = this.stateEvents.length;
+        while( i-- ) {
+            this.inputState[this.stateEvents[i]] = input.state( this.stateEvents[i] );
         }
 
-        // Move backward
-        if( input.state( 'backward' ) ) {
-            console.log( 'backward' );
-        }
-
-        // Turn left
-        if( input.state( 'turnLeft' ) ) {
-            console.log( 'turnLeft' );
-        }
-
-        // Turn right
-        if( input.state( 'turnRight' ) ) {
-            console.log( 'turnRight' );
-        }
-
-        // Shoot weapon
-        if( input.pressed( 'shoot' ) ) {
-            console.log( 'shoot' );
-        }
-
-        // Use ability
-        if( input.pressed( 'ability' ) ) {
-            console.log( 'ability' );
-        }
-
-        // Switch ability
-        if( input.pressed( 'switchAbility' ) ) {
-            console.log( 'switchAbility' );
+        i = this.pressedEvents.length;
+        while( i-- ) {
+            this.inputState[this.pressedEvents[i]] = input.pressed( this.pressedEvents[i] );
         }
 
     }
