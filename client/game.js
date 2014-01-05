@@ -8,8 +8,8 @@ global.Game = global.Class.extend({
     entities: [],
     particles: [],
 
-    universe: {},
     playerName: 'anonymous',
+    universe: {},
 
     init: function() {
         this.input = new global.Input();
@@ -69,7 +69,7 @@ global.Game = global.Class.extend({
         // Update
         var i = this.entities.length;
         while( i-- ) {
-            this.entities[i].update( time, this.input, this.socket );
+            this.entities[i].update( time, this );
         }
 
         // Draw
@@ -139,8 +139,9 @@ global.Game = global.Class.extend({
     },
 
     join: function( packet ) {
-        console.log( 'joined:', packet );
         this.playerName = packet.data.name;
+
+        console.log( this.playerName, 'joined:', packet );
     },
 
     invalidName: function( packet ) {

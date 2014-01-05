@@ -67,23 +67,25 @@ global.PlayerClient = global.Player.extend({
         draw.finish( context );
     },
 
-    handleInput: function( input, socket ) {
+    handleInput: function( input, socket, playerName ) {
 
-        var changed = false;
+        if( playerName === this.name ) {
+            this.inputChanged = false;
 
-        var i = this.stateEvents.length;
-        while( i-- ) {
-            this.inputState[this.stateEvents[i]] = input.state( this.stateEvents[i] ) ? changed = true : false;
-        }
+            var i = this.stateEvents.length;
+            while( i-- ) {
+                this.inputState[this.stateEvents[i]] = input.state( this.stateEvents[i] ) ? this.inputChanged = true : false;
+            }
 
-        i = this.pressedEvents.length;
-        while( i-- ) {
-            this.inputState[this.pressedEvents[i]] = input.pressed( this.pressedEvents[i] ) ? changed = true : false;
-        }
+            i = this.pressedEvents.length;
+            while( i-- ) {
+                this.inputState[this.pressedEvents[i]] = input.pressed( this.pressedEvents[i] ) ? this.inputChanged = true : false;
+            }
 
-        if( changed ) {
-            var packet = global.Packet.create({ entity: this.serialize() });
-            socket.emit( 'game:update_entity', packet );
+            if( this.inputChanged ) {
+                var packet = global.Packet.create({ entity: this.serialize() });
+                socket.emit( 'game:update_entity', packet );
+            }
         }
 
     }

@@ -196,11 +196,12 @@ global.Server = global.Class.extend({
 
     updateEntity: function( packet ) {
         var data = packet.data.entity;
+            data.lastUpdate = packet.time;
 
         // Find entity to update and update it
         var index = this.entities.indexAt( 'id', data.id );
         this.entities[index].updateEntity( data );
-        this.entities[index].update( packet.time );
+        this.entities[index].update( Date.now() );
 
         // Make clients aware of the update
         this.updateClientEntities( [this.entities[index].serialize()] );
