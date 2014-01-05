@@ -40,7 +40,7 @@ global.Server = global.Class.extend({
     bindSockets: function() {
         global.log( 'binding sockets' );
         this.io = require( 'socket.io' ).listen( this.socketPort, { log: true } );
-        if( !global.Constants.DEBUG ) this.io.set( 'log level', 1 );
+        /*if( !global.Constants.DEBUG )*/ this.io.set( 'log level', 1 );
 
         // Bind socket events
         var self = this;
@@ -85,7 +85,7 @@ global.Server = global.Class.extend({
                 entities.push( this.entities[i].serialize() );
             }
         }
-        this.updateClientEntities( entities );
+        if( entities.length > 0 ) this.updateClientEntities( entities );
 
         var d = new Date(time);
         global.debug( 'updated @', d.getHours()+':'+d.getMinutes()+':'+d.getSeconds() );
@@ -184,7 +184,7 @@ global.Server = global.Class.extend({
 
     spawnEntity: function( packet ) {
         var data = packet.data.entity;
-        data.lastUpdate = Date.now();
+        data.lastUpdate = packet.time;
 
         var entity = new global[data.className]( this.index, data );
         this.index++; // increment global entity index

@@ -118,6 +118,7 @@ global.Game = global.Class.extend({
     },
 
     updateEntities: function( packet ) {
+        console.log( 'updated:', packet );
         var data = packet.data.entities;
 
         // Update all entities
