@@ -65,8 +65,6 @@ global.Game = global.Class.extend({
     },
 
     update: function( time ) {
-        global.stats.begin();
-
 
         // Update
         var i = this.entities.length;
@@ -84,8 +82,6 @@ global.Game = global.Class.extend({
         // Update input handler
         this.input.update();
 
-
-        global.stats.end();
     },
 
     run: function() {
@@ -101,8 +97,12 @@ global.Game = global.Class.extend({
         })();
 
         (function animloop(){
+            global.stats.begin();
+
             requestAnimFrame(animloop);
             self.update( Date.now() );
+
+            global.stats.end();
         })();
     },
 
@@ -112,7 +112,6 @@ global.Game = global.Class.extend({
         var i = entities.length;
         var entity;
         while( i-- ) {
-            console.log( 'spawned:', packet );
             entity = this.spawnEntity( entities[i].clientClassName, entities[i] );
         };
     },
@@ -122,6 +121,8 @@ global.Game = global.Class.extend({
 
         var entity = new global[className]( settings.id, settings );
         this.entities.push( entity );
+
+        console.log( 'spawned:', entity );
 
         return entity;
     },
