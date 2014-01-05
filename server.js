@@ -1,5 +1,6 @@
 // Third party
 var colors = require('colors');
+Big = require('./lib/vendor/big.js');
 
 // Constants
 require('./lib/constants.js');

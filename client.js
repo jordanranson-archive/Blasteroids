@@ -58,6 +58,8 @@ window.onload = function() {
      */
 
     // Third party
+    require('lib/vendor/big.js');
+    require('client/vendor/stats.min.js');
     require('client/vendor/zepto.js');
     require('client/vendor/socket.io.js');
 
@@ -82,6 +84,11 @@ window.onload = function() {
 
     // Start the game
     load(function() {
+
+        global.stats = new Stats();
+        global.stats.setMode( 1 );
+        document.body.appendChild( global.stats.domElement );
+
         var game = new global.Game();
         game.run();
     });

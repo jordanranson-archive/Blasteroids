@@ -65,6 +65,8 @@ global.Game = global.Class.extend({
     },
 
     update: function( time ) {
+        global.stats.begin();
+
 
         // Update
         var i = this.entities.length;
@@ -81,6 +83,9 @@ global.Game = global.Class.extend({
 
         // Update input handler
         this.input.update();
+
+
+        global.stats.end();
     },
 
     run: function() {
@@ -127,7 +132,6 @@ global.Game = global.Class.extend({
     },
 
     updateEntities: function( packet ) {
-        console.log( 'updated' );
         var data = packet.data.entities;
 
         // Update all entities
