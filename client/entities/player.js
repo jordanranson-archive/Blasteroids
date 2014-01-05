@@ -18,8 +18,10 @@ global.PlayerClient = global.Player.extend({
         'switchAbility'
     ],
 
-    init: function( id, settings ) {
-        this._super( id, settings );
+    update: function( time, game ) {
+        this._super( time );
+
+        this.handleInput( game.input, game.socket, game.playerName );
     },
 
     render: function( draw ) {
@@ -84,7 +86,7 @@ global.PlayerClient = global.Player.extend({
 
             if( this.inputChanged ) {
                 var packet = global.Packet.create({ entity: this.serialize() });
-                socket.emit( 'game:update_entity', packet );
+                //socket.emit( 'game:update_entity', packet );
             }
         }
 
