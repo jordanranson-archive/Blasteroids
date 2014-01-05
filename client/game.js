@@ -49,6 +49,10 @@ global.Game = global.Class.extend({
         // Server removed an entity
         this.socket.on(     'server:remove_entity', 
             function( data ) { self.removeEntity( data ); });
+
+        // Server updated an entity
+        this.socket.on(     'server:update_entities', 
+            function( data ) { self.updateEntities( data ); });
     },
 
     update: function( time ) {
@@ -111,6 +115,10 @@ global.Game = global.Class.extend({
     removeEntity: function( packet ) {
         console.log( 'removed:', packet );
         this.entities.remove( packet.data.id );
+    },
+
+    updateEntities: function( packet ) {
+        
     },
 
     join: function( packet ) {

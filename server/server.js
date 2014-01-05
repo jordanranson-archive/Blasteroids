@@ -55,12 +55,12 @@ global.Server = global.Class.extend({
 
             // Game wants to spawn an entity
             socket.on( 'game:spawn_entity', function( packet ) {
-                self.spawnEntity( socket, packet );
+                self.spawnEntity( packet );
             });
 
             // Game wants to update an entity
             socket.on( 'game:update_entity', function( packet ) {
-                self.updateEntity( socket, packet );
+                self.updateEntity( packet );
             });
 
             // Remove player from the game
@@ -75,7 +75,17 @@ global.Server = global.Class.extend({
     update: function() {
         var time = Date.now();
 
-        // do update code here
+        // update all entities
+        var entities = [];
+        var i = this.entities.length;
+        var delta = time - global.Constants.UPDATE_INTERVAL + 1;
+        while( i-- ) {
+            if( this.entities[i].lastUpdate <= delta ) {
+                this.entities[i].update( time );
+                entities.push( this.entities[i].serialize() );
+            }
+        }
+        this.updateClientEntities( entities );
 
         var d = new Date(time);
         global.debug( 'updated @', d.getHours()+':'+d.getMinutes()+':'+d.getSeconds() );
@@ -172,7 +182,7 @@ global.Server = global.Class.extend({
         global.log( 'client disconnected:'.red, message );
     },
 
-    spawnEntity: function( socket, packet ) {
+    spawnEntity: function( packet ) {
         var data = packet.data.entity;
         data.lastUpdate = packet.time;
 
@@ -180,19 +190,24 @@ global.Server = global.Class.extend({
         this.index++; // increment global entity index
         this.entities.push( entity );
 
-        packet = global.Packet.create({ entities: [player.serialize()] });
-        socket.broadcast.to( this.universe.room ).emit( 'server:spawn_entities', packet );
+        var packet = global.Packet.create({ entities: [player.serialize()] });
+        this.io.sockets.in( this.universe.room ).emit( 'server:spawn_entities', packet );
     },
 
-    updateEntity: function( socket, packet ) {
-        var data = packet.data.entity;chr
+    updateEntity: function( packet ) {
+        var data = packet.data.entity;
 
         // Find entity to update and update it
         var index = this.entities.indexAt( 'id', data.id );
         this.entities[index].updateEntity( data );
+        this.entities[index].update( packet.time );
 
         // Make clients aware of the update
-        packet = global.Packet.create({ entities: [this.entities[index].serialize()] });
-        socket.broadcast.to( this.universe.room ).emit( 'server:update_entities', packet );
+        this.updateClientEntities( [this.entities[index].serialize()] );
+    },
+
+    updateClientEntities: function( entities ) {
+        var packet = global.Packet.create({ entities: entities });
+        this.io.sockets.in( this.universe.room ).emit( 'server:update_entities', packet );
     }
 });
