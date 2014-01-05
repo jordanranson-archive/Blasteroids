@@ -184,7 +184,7 @@ global.Server = global.Class.extend({
 
     spawnEntity: function( packet ) {
         var data = packet.data.entity;
-        data.lastUpdate = packet.time;
+        data.lastUpdate = Date.now();
 
         var entity = new global[data.className]( this.index, data );
         this.index++; // increment global entity index

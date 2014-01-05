@@ -118,7 +118,14 @@ global.Game = global.Class.extend({
     },
 
     updateEntities: function( packet ) {
-        
+        var data = packet.data.entities;
+
+        // Update all entities
+        var i = data.length, index;
+        while( i-- ) {
+            index = this.entities.indexAt( 'id', data[i].id );
+            this.entities[index].updateEntity( data[i] );
+        }
     },
 
     join: function( packet ) {
